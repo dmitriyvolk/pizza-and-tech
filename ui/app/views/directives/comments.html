@@ -1,0 +1,12 @@
+<div class="panel panel-default" ng-show="comments.length">
+	<div class="panel-heading">
+		<h4>Comments</h4>
+	</div>
+	<div class="panel-body">
+		<ul class="list-group">
+			<li class="list-group-item" ng-repeat="comment in comments">
+				<pat-comment comment="comment"></pat-comment>
+			</li>
+		</ul>
+	</div>
+</div>

@@ -1,0 +1,34 @@
+{
+	"yes": [
+		{
+			"member": {
+				"id": 1,
+				"displayName": "Dmitriy"
+			},
+			"comment": "I love Netflix"
+		},
+		{
+			"member": {
+				"id": 2,
+				"displayName": "cer"
+			}
+		}
+	],
+	"no": [
+		{
+			"member": {
+				"id": 54,
+				"displayName": "mike"
+			},
+			"comment": "Sorry, I'm busy that night"
+		}
+	],
+	"maybe": [
+		{
+			"member": {
+				"id": 41,
+				"displayName": "John Q. Public"
+			}
+		}
+	]
+}

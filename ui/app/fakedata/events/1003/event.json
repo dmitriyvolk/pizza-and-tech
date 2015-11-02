@@ -1,0 +1,11 @@
+{
+    "id": 1003,
+    "name": "Real World Use Cases for Advanced FP at x.ai [beginner-friendly]",
+    "dateStart": 1446690600000,
+    "dateEnd": 1446699600000,
+	"description": "At x.ai we are building Amy and Andrew, AI assistants, who magically schedule meetings for you over email. Their brain is written in Scala, carefully employing functional programming techniques to improve correctness, testability and maintainability. This is the story of our decisions, how they turned out and what we overlooked. I’ll speak about relevant parts of our architecture and how we are using libraries like scalaz, shapeless and Monocle in production. I’ll give a gentle, beginner-targeted introduction to concepts such as Reader, Applicative, Monoid, Semigroup and Lenses and explain how we use them in Amy’s and Andrew’s brain. ",
+	"group": {
+	    "id": 2,
+	    "name": "SF Scala"
+	}
+}

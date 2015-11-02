@@ -1,0 +1,11 @@
+{
+	"id": 1001,
+	"name": "How Netflix directs 1/3 of the Internet's traffic",
+	"dateStart": 1446690600000,
+	"dateEnd": 1446699600000,
+	"description": "Every second thousands of Netflix members hit the play button to stream content on more than 1000 different Netflix device types. These moments are facilitated by microservices that manage the playback experience and a purpose-built Content Delivery Network distributed over 100s of physical locations. In this talk, we’ll walk through the architecture that makes streaming happen, while highlighting interesting lessons and design patterns that can be applied broadly.\nWe will focus on:\n• Embracing microservices with loosely-coupled APIs to improve development velocity and ease operations.\n• Applying rules engines and configuration-based deployments to create a customized viewing experience which accommodates each member’s tastes, device capabilities and location.\n• Using data about viewing habits and network topology to distribute content over CDN appliances in a cost effective and timely manner.\n• Using real-time network and capacity signals to pick the best CDN appliances a member should stream content from.",
+	"group": {
+	    "id": 1,
+	    "name": "East Bay Java User Group"
+	}
+}

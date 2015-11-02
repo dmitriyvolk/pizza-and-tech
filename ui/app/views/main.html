@@ -1,0 +1,24 @@
+<div class="jumbotron">
+  <h1>Pizza and Tech</h1>
+  <p>Eating pizza feeds your gut. Discussing technology while eating pizza feeds your brain.</p>
+</div>
+
+<div class="row">
+	<div class="panel panel-default">
+		<div class="panel-heading"><h4>Featured Groups</h4></div>
+		<div class="panel-body">
+			<ul class="list-group">
+				<li class="list-group-item" ng-repeat="group in featuredGroups">
+					<a href="#/groups/{{group.id}}">{{group.name}}</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+<div class="row marketing">
+  <h4>Join a group</h4>
+  <p>
+    Find groups of people around you who are passionate about the stuff they do.
+  </p>
+
+</div>

@@ -1,0 +1,36 @@
+{
+	"yes": [
+		{
+			"member": {
+				"id": 1,
+				"displayName": "Dmitriy"
+			},
+			"comment": "AI Rules"
+		},
+		{
+			"member": {
+				"id": 60,
+				"displayName": "Aleksei Khrabrov"
+			},
+			"comment": "I'm the group organizer, so I always attend"
+		}
+	],
+	"no": [
+		{
+			"member": {
+				"id": 62,
+				"displayName": "John Smith"
+			},
+			"comment": "Who cares?"
+		}
+	],
+	"maybe": [
+		{
+			"member": {
+				"id": 61,
+				"displayName": "Azad Bolour"
+			},
+			"comment": "I might be busy"
+		}
+	]
+}

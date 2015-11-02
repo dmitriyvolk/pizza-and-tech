@@ -1,0 +1,11 @@
+[
+	{
+		"id": 10001,
+		"timestamp": 1446431705000,
+		"author": {
+			"id": 11,
+			"displayName": "David"
+		},
+		"comment": "This is the coolest group, like, ever!"
+	}
+]

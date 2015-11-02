@@ -1,0 +1,20 @@
+[
+	{
+		"id": 10001,
+		"timestamp": 1446431705000,
+		"author": {
+			"id": 1,
+			"displayName": "Dmitriy"
+		},
+		"comment": "Will there be live cast?"
+	},
+	{
+		"id": 10002,
+		"timestamp": 1446438905000,
+		"author": {
+			"id": 2,
+			"displayName": "cer"
+		},
+		"comment": "No, and please stop asking."
+	}
+]

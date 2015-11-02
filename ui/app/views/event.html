@@ -1,0 +1,59 @@
+<div class="event-container">
+	<div class="row">
+		<div class="col-md-9">
+			<div class="row">
+				<h2>{{event.name}}</h2>
+				<div id="parent-group"><a href="#/groups/{{event.group.id}}">{{event.group.name}}</a></div>
+				<div>{{event.dateStart | date: 'longDate'}}</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4>Agenda</h4>
+					</div>
+					<div class="panel-body">
+						<div uib-collapsed="isDescriptionCollapsed"><p>{{event.description}}></p></div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<pat-comments comments="comments"></pat-comments>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div id="rsvps">
+				<h3>RSVPs</h3>
+				<uib-accordion close-others="true">
+					<uib-accordion-group is-open="true">
+						<uib-accordion-heading>
+							<i class="glyphicon glyphicon-ok"></i>&nbsp;Yes
+						</uib-accordion-heading>
+						<ul class="list-group">
+							<li class="list-group-item list-group-item-success" ng-repeat="rsvp in rsvps.yes">
+								<rsvp data="rsvp"></rsvp>
+							</li>
+						</ul>
+					</uib-accordion-group>
+					<uib-accordion-group>
+						<uib-accordion-heading>
+							<i class="glyphicon glyphicon-remove"></i>&nbsp;No
+						</uib-accordion-heading>
+						<ul class="list-group">
+							<li class="list-group-item list-group-item-danger" ng-repeat="rsvp in rsvps.no">
+								<rsvp data="rsvp"></rsvp>
+							</li>
+						</ul>
+					</uib-accordion-group>
+					<uib-accordion-group>
+						<uib-accordion-heading>
+							<i class="glyphicon glyphicon-asterisk"></i>&nbsp;Maybe
+						</uib-accordion-heading>
+						<ul class="list-group">
+							<li class="list-group-item list-group-item-warning" ng-repeat="rsvp in rsvps.maybe">
+								<rsvp data="rsvp"></rsvp>
+							</li>
+						</ul>
+					</uib-accordion-group>
+				</uib-accordion>
+			</div>
+		</div>
+	</div>
+</div>

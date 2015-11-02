@@ -1,0 +1,11 @@
+{
+    "id": 1004,
+    "name": "Scala Puzzle Night",
+    "dateStart": 1446690600000,
+    "dateEnd": 1446699600000,
+	"description": "Join us for another Scala Puzzle Night! Come hone your skills, learn from the community by solving a puzzle with others! This months tentative theme is logic puzzles. ",
+	"group": {
+	    "id": 2,
+	    "name": "SF Scala"
+	}
+}

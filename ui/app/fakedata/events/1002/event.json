@@ -1,0 +1,11 @@
+{
+	"id": 1002,
+	"name": "Using eventuate.io to architect dynamic web applications that are static",
+	"dateStart": 1446690600000,
+	"dateEnd": 1446699600000,
+	"description": "We will learn how to use event sourcing to create read-heavy applications that only require S3 and Lambda to run",
+	"group": {
+	    "id": 1,
+	    "name": "East Bay Java User Group"
+	}
+}
