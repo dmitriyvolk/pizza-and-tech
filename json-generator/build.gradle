@@ -1,0 +1,14 @@
+apply plugin: 'scala'
+
+repositories {
+    jcenter()
+    mavenLocal()
+    maven { url "https://06c59145-4e83-4f22-93ef-6a7eee7aebaa.repos.chrisrichardson.net.s3.amazonaws.com" }
+}
+
+dependencies {
+    compile "org.scala-lang:scala-library:2.10.2"
+    compile "net.chrisrichardson.eventstore.common:eventstore-common:$eventStoreCommonVersion"
+    compile "net.chrisrichardson.eventstore.client:eventstore-client-event-handling:$eventStoreClientVersion"
+    compile project(':domain')
+}
