@@ -1,4 +1,4 @@
-package net.dmitriyvolk.pizzaandtech.domain.event.events
+package net.dmitriyvolk.pizzaandtech.domain.meeting.events
 
 /**
   * Created by xbo on 11/3/15.

@@ -1,8 +1,8 @@
 package net.dmitriyvolk.pizzandtech.domain.event
 
 import net.chrisrichardson.eventstore.EntityId
-import net.dmitriyvolk.pizzaandtech.domain.event.{UserAndComment, Rsvps}
-import net.dmitriyvolk.pizzaandtech.domain.event.events._
+import net.dmitriyvolk.pizzaandtech.domain.meeting.{UserAndComment, Rsvps}
+import net.dmitriyvolk.pizzaandtech.domain.meeting.events._
 import org.scalatest.{PropSpec, Matchers}
 import org.scalatest.matchers.{MatchResult, Matcher}
 import org.scalatest.prop.TableDrivenPropertyChecks
