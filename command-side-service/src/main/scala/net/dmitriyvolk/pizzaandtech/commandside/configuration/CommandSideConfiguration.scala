@@ -5,7 +5,7 @@ import org.springframework.context.annotation.{ComponentScan, Configuration}
 
 @Configuration
 @EnableAutoConfiguration
-@ComponentScan(basePackages = {"net.dmitriyvolk.pizzaandtech.commandside"})
+@ComponentScan(basePackages = Array("net.dmitriyvolk.pizzaandtech.domain", "net.dmitriyvolk.pizzaandtech.commandside"))
 class CommandSideConfiguration {
 
 }

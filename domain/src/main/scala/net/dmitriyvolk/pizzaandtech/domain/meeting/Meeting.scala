@@ -5,6 +5,7 @@ import net.dmitriyvolk.pizzaandtech.domain.EntityIdWrapper
 import net.dmitriyvolk.pizzaandtech.domain.comment.CommentDetails
 import net.dmitriyvolk.pizzaandtech.domain.meeting.commands._
 import net.dmitriyvolk.pizzaandtech.domain.meeting.events._
+import net.dmitriyvolk.pizzaandtech.domain.Implicits._
 
 case class MeetingId(entityId: EntityId) extends EntityIdWrapper
 
