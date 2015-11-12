@@ -11,6 +11,8 @@ case class GroupId(entityId: EntityId) extends EntityIdWrapper
 case class Group(groupDetails: GroupDetails, comments: Seq[CommentDetails])
   extends PatternMatchingCommandProcessingAggregate[Group, GroupCommand] {
 
+  def this() = this(null, Seq())
+
   override def processCommand: PartialFunction[GroupCommand, Seq[Event]] = {
     case RegisterNewGroupCommand(groupDetails) =>
       Seq(GroupCreatedEvent(groupDetails))

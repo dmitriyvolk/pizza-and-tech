@@ -14,8 +14,8 @@ import scala.concurrent.ExecutionContext.Implicits.global
 class GroupContoller @Autowired() (private val groupService: GroupService) {
 
   @RequestMapping(method=Array(POST))
-  def createGroup(@RequestBody groupDetails: GroupDetails) = {
-    val future = groupService.createGroup(groupDetails)
+  def createGroup(@RequestBody createGroupRequest: CreateGroupRequest) = {
+    val future = groupService.createGroup(createGroupRequest.makeGroupDetails)
     WebUtil.toDeferredResult(future map (createdGroup => CreateGroupResponse(createdGroup.entityId.id)))
   }
 
@@ -56,6 +56,9 @@ class GroupMembershipController @Autowired() (private val groupService: GroupSer
 
 }
 
-case class CreateGroupResponse(val groupId: String)
-case class UpdateGroupResponse(val groupId: String)
+case class CreateGroupRequest(name: String, description: String) {
+  def makeGroupDetails = GroupDetails(name, description)
+}
+case class CreateGroupResponse(groupId: String)
+case class UpdateGroupResponse(groupId: String)
 

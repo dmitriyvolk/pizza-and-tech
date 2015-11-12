@@ -2,11 +2,13 @@ package net.dmitriyvolk.pizzaandtech.domain.configuration
 
 import net.chrisrichardson.eventstore.EventStore
 import net.chrisrichardson.eventstore.subscriptions.EnableEventHandlers
+import net.chrisrichardson.utils.config.MetricRegistryConfiguration
 import net.dmitriyvolk.pizzaandtech.domain.group.GroupService
 import net.dmitriyvolk.pizzaandtech.domain.meeting.MeetingService
-import org.springframework.context.annotation.{Bean, Configuration}
+import org.springframework.context.annotation.{Import, Bean, Configuration}
 
 @Configuration
+@Import(Array(classOf[MetricRegistryConfiguration]))
 @EnableEventHandlers
 class DomainConfiguration {
 

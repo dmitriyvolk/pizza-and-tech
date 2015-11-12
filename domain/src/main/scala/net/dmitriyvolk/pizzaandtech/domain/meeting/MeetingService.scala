@@ -9,7 +9,6 @@ import net.dmitriyvolk.pizzaandtech.domain.meeting.events.RsvpDetails
 import net.dmitriyvolk.pizzaandtech.domain.user.UserId
 import org.springframework.stereotype.Service
 
-@Service
 class MeetingService(implicit eventStore: EventStore) {
 
   def scheduleMeeting(meetingDetails: MeetingDetails) = newEntity[Meeting] <== ScheduleMeetingCommand(meetingDetails)
