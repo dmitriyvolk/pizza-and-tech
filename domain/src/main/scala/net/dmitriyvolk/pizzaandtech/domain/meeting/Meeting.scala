@@ -11,8 +11,10 @@ case class MeetingId(entityId: EntityId) extends EntityIdWrapper
 
 case class Meeting(meetingDetails: MeetingDetails, rsvps: Rsvps, comments: Seq[CommentDetails])
  extends PatternMatchingCommandProcessingAggregate[Meeting, MeetingCommand] {
+
+  def this() = this(null, null, null)
   override def processCommand: PartialFunction[MeetingCommand, Seq[Event]] = {
-    case ScheduleMeetingCommand(meetingDetails) => Seq(MeetingScheduledEvent(meetingDetails))
+    case ScheduleMeetingCommand(groupId, meetingDetails) => Seq(MeetingScheduledEvent(groupId, meetingDetails))
     case UpdateMeetingDetailsCommand(meetingDetails) => Seq(MeetingDetailsUpdatedEvent(meetingDetails))
     case CommentOnMeetingCommand(commentDetails) => Seq(CommentAddedToMeetingEvent(commentDetails))
     case RsvpToMeetingCommand(rsvpDetails, userId) =>
@@ -24,7 +26,7 @@ case class Meeting(meetingDetails: MeetingDetails, rsvps: Rsvps, comments: Seq[C
   }
 
   override def applyEvent: PartialFunction[Event, Meeting] = {
-    case MeetingScheduledEvent(initialMeetingDetails) => copy(meetingDetails = initialMeetingDetails)
+    case MeetingScheduledEvent(groupId, initialMeetingDetails) => copy(meetingDetails = initialMeetingDetails, rsvps = new Rsvps(Seq(), Seq(), Seq()), Seq())
     case MeetingDetailsUpdatedEvent(updatedMeetingDetails) => copy(meetingDetails = updatedMeetingDetails)
     case CommentAddedToMeetingEvent(commentDetails) => copy(comments = comments :+ commentDetails)
     case MemberIsComingToMeeting(userId, comment) => copy(rsvps = rsvps.respondYes(userId, comment))

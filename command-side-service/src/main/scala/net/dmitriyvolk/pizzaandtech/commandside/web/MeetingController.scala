@@ -1,6 +1,7 @@
 package net.dmitriyvolk.pizzaandtech.commandside.web
 
 import net.dmitriyvolk.pizzaandtech.domain.comment.CommentDetails
+import net.dmitriyvolk.pizzaandtech.domain.group.GroupId
 import net.dmitriyvolk.pizzaandtech.domain.meeting.{MeetingService, MeetingId, MeetingDetails}
 import net.dmitriyvolk.pizzaandtech.domain.meeting.events.RsvpDetails
 import net.dmitriyvolk.pizzaandtech.domain.user.UserId
@@ -16,9 +17,9 @@ import WebImplicits._
 class MeetingController @Autowired() (private val meetingService: MeetingService) {
 
   @RequestMapping(method=Array(POST))
-  def scheduleMeeting(@RequestBody meetingDetails: MeetingDetails) =
+  def scheduleMeeting(@RequestBody scheduleMeetingRequest: ScheduleMeetingRequest) =
     WebUtil.toDeferredResult(
-      meetingService.scheduleMeeting(meetingDetails)
+      meetingService.scheduleMeeting(GroupId(scheduleMeetingRequest.groupId), scheduleMeetingRequest.meetingDetails)
         .map (createdMeeting => ScheduleMeetingResponse(createdMeeting.entityId.id)))
 
   def updateMeetingDetails(@PathVariable("meetingId") meetingId: String, @RequestBody meetingDetails: MeetingDetails) =
@@ -52,6 +53,8 @@ class MeetingRsvpController @Autowired() (private val meetingService: MeetingSer
       meetingService.rsvpToMeeting(MeetingId(meetingId), UserId(memberId), rsvpDetails)
         .map(updatedMeeting => UpdateMeetingResponse(updatedMeeting.entityId.id)))
 }
+
+case class ScheduleMeetingRequest(groupId: String, meetingDetails: MeetingDetails)
 
 case class ScheduleMeetingResponse(meetingId: String)
 
