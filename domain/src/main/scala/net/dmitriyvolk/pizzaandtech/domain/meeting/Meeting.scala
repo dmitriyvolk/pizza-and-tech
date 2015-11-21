@@ -7,7 +7,7 @@ import net.dmitriyvolk.pizzaandtech.domain.meeting.commands._
 import net.dmitriyvolk.pizzaandtech.domain.meeting.events._
 import net.dmitriyvolk.pizzaandtech.domain.Implicits._
 
-case class MeetingId(entityId: EntityId) extends EntityIdWrapper
+
 
 case class Meeting(meetingDetails: MeetingDetails, rsvps: Rsvps, comments: Seq[CommentDetails])
  extends PatternMatchingCommandProcessingAggregate[Meeting, MeetingCommand] {

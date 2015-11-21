@@ -7,5 +7,10 @@ repositories {
 }
 
 dependencies {
-    compile project(':domain')
+    compile "net.chrisrichardson.eventstore.common:eventstore-common:$eventStoreCommonVersion"
+    compile "net.chrisrichardson.eventstore.client:eventstore-client-event-handling:$eventStoreClientVersion"
+    compile "net.chrisrichardson.eventstore.client:eventstore-http-stomp-client:$eventStoreClientVersion"
+    compile project(':common-events')
+
+    testCompile "net.chrisrichardson.eventstore.client:eventstore-jdbc:$eventStoreClientVersion"
 }

@@ -8,7 +8,6 @@ import net.dmitriyvolk.pizzaandtech.domain.group.GroupId
 import net.dmitriyvolk.pizzaandtech.domain.meeting.commands.{CommentOnMeetingCommand, RsvpToMeetingCommand, ScheduleMeetingCommand, UpdateMeetingDetailsCommand}
 import net.dmitriyvolk.pizzaandtech.domain.meeting.events.RsvpDetails
 import net.dmitriyvolk.pizzaandtech.domain.user.UserId
-import org.springframework.stereotype.Service
 
 class MeetingService(implicit eventStore: EventStore) {
 

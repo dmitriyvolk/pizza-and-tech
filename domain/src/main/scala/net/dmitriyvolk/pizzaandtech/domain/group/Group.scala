@@ -6,7 +6,7 @@ import net.dmitriyvolk.pizzaandtech.domain.comment.CommentDetails
 import net.dmitriyvolk.pizzaandtech.domain.group.commands._
 import net.dmitriyvolk.pizzaandtech.domain.group.events.{CommentAddedEvent, GroupDetailsUpdatedEvent, GroupCreatedEvent}
 
-case class GroupId(entityId: EntityId) extends EntityIdWrapper
+
 
 case class Group(groupDetails: GroupDetails, comments: Seq[CommentDetails])
   extends PatternMatchingCommandProcessingAggregate[Group, GroupCommand] {
