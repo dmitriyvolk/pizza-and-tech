@@ -4,14 +4,18 @@ import net.chrisrichardson.eventstore.{EntityId, Event, PatternMatchingCommandPr
 import net.dmitriyvolk.pizzaandtech.domain.EntityIdWrapper
 import net.dmitriyvolk.pizzaandtech.domain.comment.CommentDetails
 import net.dmitriyvolk.pizzaandtech.domain.group.commands._
-import net.dmitriyvolk.pizzaandtech.domain.group.events.{CommentAddedEvent, GroupDetailsUpdatedEvent, GroupCreatedEvent}
+import net.dmitriyvolk.pizzaandtech.domain.group.events._
+import net.dmitriyvolk.pizzaandtech.domain.meeting.MeetingDetails
+import net.dmitriyvolk.pizzaandtech.domain.user.{UserIdAndBriefInfo, UserBriefInfo, UserId}
 
-
-
-case class Group(groupDetails: GroupDetails, comments: Seq[CommentDetails])
+case class Group(groupDetails: GroupDetails, comments: Seq[CommentDetails], meetings: Seq[MeetingDetails], users: Seq[UserIdAndBriefInfo])
   extends PatternMatchingCommandProcessingAggregate[Group, GroupCommand] {
 
-  def this() = this(null, Seq())
+  def this() = this(null, Seq(), Seq(), Seq())
+
+  def appendMeetingList(newMeeting: MeetingDetails) = meetings :+ newMeeting
+  def userJoins(userId: UserId, userInfo: UserBriefInfo) = users:+ UserIdAndBriefInfo(userId, userInfo)
+  def userLeaves(userId: UserId) = users.filter(_.userId != userId)
 
   override def processCommand: PartialFunction[GroupCommand, Seq[Event]] = {
     case RegisterNewGroupCommand(groupDetails) =>
@@ -20,11 +24,18 @@ case class Group(groupDetails: GroupDetails, comments: Seq[CommentDetails])
       Seq(GroupDetailsUpdatedEvent(groupDetails))
     case CommentOnGroupCommand(commentDetails) =>
       Seq(CommentAddedEvent(commentDetails))
+    case RecordMeetingScheduledCommand(meetingDetails) =>
+      Seq(NewMeetingRecordedEvent(meetingDetails), MeetingListUpdatedEvent(appendMeetingList(meetingDetails)))
+    case AcceptUserIntoGroupCommand(userId, userInfo) =>
+      Seq(UserListForGroupUpdatedEvent(userJoins(userId, userInfo)), UserAcceptedIntoGroupEvent(userId, groupDetails))
+    case ExpellUserFromGroupCommand(userId) =>
+      Seq(UserListForGroupUpdatedEvent(userLeaves(userId)), UserLeftGroupEvent(userId))
   }
 
   override def applyEvent: PartialFunction[Event, Group] = {
     case GroupCreatedEvent(initialGroupDetails) => copy(groupDetails = initialGroupDetails)
     case GroupDetailsUpdatedEvent(updatedGroupDetails) => copy(groupDetails = updatedGroupDetails)
     case CommentAddedEvent(commentDetails) => copy(comments = comments :+ commentDetails)
+    case NewMeetingRecordedEvent(meetingDetails) => copy(meetings = appendMeetingList(meetingDetails))
   }
 }

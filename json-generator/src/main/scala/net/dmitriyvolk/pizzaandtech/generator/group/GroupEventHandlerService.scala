@@ -2,9 +2,10 @@ package net.dmitriyvolk.pizzaandtech.generator.group
 
 import net.chrisrichardson.eventstore.subscriptions.{EventHandlerMethod, DispatchedEvent, CompoundEventHandler, EventSubscriber}
 import net.dmitriyvolk.pizzaandtech.domain.group.GroupId
-import net.dmitriyvolk.pizzaandtech.domain.group.events.{MemberJoinedEvent, GroupDetailsUpdatedEvent, GroupCreatedEvent}
+import net.dmitriyvolk.pizzaandtech.domain.group.events.{MeetingListUpdatedEvent, MemberJoinedEvent, GroupDetailsUpdatedEvent, GroupCreatedEvent}
 import net.dmitriyvolk.pizzaandtech.domain.user.UserId
 import net.dmitriyvolk.pizzaandtech.generator.StateUpdater
+import scala.concurrent.ExecutionContext.Implicits.global
 
 import scala.concurrent.Future
 
@@ -27,5 +28,11 @@ class GroupEventHandlerService(stateUpdater: StateUpdater) extends CompoundEvent
     val userId: UserId = UserId(de.event.memberId)
     stateUpdater.addMemberToGroup(groupId, userId)
     stateUpdater.addGroupToMembersList(userId, groupId)
+  }
+
+  @EventHandlerMethod
+  def meetingListUpdated(de: DispatchedEvent[MeetingListUpdatedEvent]) = Future {
+    val groupId: GroupId = GroupId(de.entityId)
+    stateUpdater.updateMeetingListForGroup(groupId, de.event.meetingList)
   }
 }

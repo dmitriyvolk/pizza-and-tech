@@ -3,7 +3,7 @@ package net.dmitriyvolk.pizzaandtech.commandside.web
 import net.dmitriyvolk.pizzaandtech.commandside.web.WebImplicits._
 import net.dmitriyvolk.pizzaandtech.domain.comment.CommentDetails
 import net.dmitriyvolk.pizzaandtech.domain.group.{GroupDetails, GroupId, GroupService}
-import net.dmitriyvolk.pizzaandtech.domain.user.UserId
+import net.dmitriyvolk.pizzaandtech.domain.user.{UserService, UserId}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.RequestMethod._
 import org.springframework.web.bind.annotation._
@@ -40,17 +40,17 @@ class GroupCommentsController @Autowired() (private val groupService: GroupServi
 
 @RestController
 @RequestMapping(Array("/{groupId}/members"))
-class GroupMembershipController @Autowired() (private val groupService: GroupService) {
+class GroupMembershipController @Autowired() (private val userService: UserService) {
 
   @RequestMapping(method=Array(POST))
   def joinGroup(@PathVariable groupId: String, @RequestParam("userId") userId: String) = {
-    val f = groupService.joinGroup(GroupId(groupId), UserId(userId))
+    val f = userService.joinGroup(UserId(userId), GroupId(groupId))
     WebUtil.toDeferredResult(f map(group => UpdateGroupResponse(group.entityId.id)))
   }
 
   @RequestMapping(value=Array("/{memberId}"), method=Array(DELETE))
   def leaveGroup(@PathVariable("groupId") groupId: String, @PathVariable("userId") memberId: String) = {
-    val f = groupService.leaveGroup(GroupId(groupId), UserId(memberId))
+    val f = userService.leaveGroup(UserId(memberId), GroupId(groupId))
     WebUtil.toDeferredResult(f map(group => UpdateGroupResponse(group.entityId.id)))
   }
 

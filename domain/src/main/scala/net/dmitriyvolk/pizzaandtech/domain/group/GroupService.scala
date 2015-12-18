@@ -5,7 +5,6 @@ import net.chrisrichardson.eventstore.util.ServiceUtil._
 import net.dmitriyvolk.pizzaandtech.domain.Implicits._
 import net.dmitriyvolk.pizzaandtech.domain.comment.CommentDetails
 import net.dmitriyvolk.pizzaandtech.domain.group.commands._
-import net.dmitriyvolk.pizzaandtech.domain.user.UserId
 
 class GroupService(implicit eventStore: EventStore) {
 
@@ -15,8 +14,5 @@ class GroupService(implicit eventStore: EventStore) {
 
   def commentOnGroup(groupId: GroupId, commentDetails: CommentDetails) = existingEntity[Group](groupId) <== CommentOnGroupCommand(commentDetails)
 
-  def joinGroup(groupId: GroupId, userId: UserId) = existingEntity[Group](groupId) <== JoinGroupCommand(userId)
-
-  def leaveGroup(groupId: GroupId, userId: UserId) = existingEntity[Group](groupId) <== LeaveGroupCommand(userId)
 
 }

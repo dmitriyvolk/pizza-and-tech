@@ -5,6 +5,7 @@ import net.chrisrichardson.eventstore.subscriptions.EnableEventHandlers
 import net.chrisrichardson.utils.config.MetricRegistryConfiguration
 import net.dmitriyvolk.pizzaandtech.domain.group.GroupService
 import net.dmitriyvolk.pizzaandtech.domain.meeting.MeetingService
+import net.dmitriyvolk.pizzaandtech.domain.user.UserService
 import org.springframework.context.annotation.{Import, Bean, Configuration}
 
 @Configuration
@@ -17,4 +18,7 @@ class DomainConfiguration {
 
   @Bean
   def meetingService(eventStore: EventStore) = new MeetingService()(eventStore)
+
+  @Bean
+  def userService(eventStore: EventStore) = new UserService()(eventStore)
 }
