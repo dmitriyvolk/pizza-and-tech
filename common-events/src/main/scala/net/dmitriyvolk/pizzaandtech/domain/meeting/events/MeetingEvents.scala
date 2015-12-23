@@ -8,7 +8,7 @@ import net.dmitriyvolk.pizzaandtech.domain.user.UserId
 
 sealed trait MeetingEvents extends Event
 case class MeetingScheduledEvent(groupId: GroupId, meetingDetails: MeetingDetails) extends MeetingEvents
-case class MeetingDetailsUpdatedEvent(meetingDetails: MeetingDetails) extends MeetingEvents
+case class MeetingDetailsUpdatedEvent(groupId: GroupId, meetingDetails: MeetingDetails) extends MeetingEvents
 case class MemberRsvpedEvent(rsvp: RsvpDetails, memberId: UserId) extends MeetingEvents
 case class MemberChangedRsvpEvent(rsvpDetails: RsvpDetails, memberId: EntityId) extends MeetingEvents
 case class CommentAddedToMeetingEvent(comment: CommentDetails) extends MeetingEvents

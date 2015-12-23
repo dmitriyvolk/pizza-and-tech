@@ -3,19 +3,20 @@ package net.dmitriyvolk.pizzaandtech.domain.meeting
 import net.chrisrichardson.eventstore.{EntityId, Event, PatternMatchingCommandProcessingAggregate}
 import net.dmitriyvolk.pizzaandtech.domain.EntityIdWrapper
 import net.dmitriyvolk.pizzaandtech.domain.comment.CommentDetails
+import net.dmitriyvolk.pizzaandtech.domain.group.GroupId
 import net.dmitriyvolk.pizzaandtech.domain.meeting.commands._
 import net.dmitriyvolk.pizzaandtech.domain.meeting.events._
 import net.dmitriyvolk.pizzaandtech.domain.Implicits._
 
 
 
-case class Meeting(meetingDetails: MeetingDetails, rsvps: Rsvps, comments: Seq[CommentDetails])
+case class Meeting(groupId: GroupId, meetingDetails: MeetingDetails, rsvps: Rsvps, comments: Seq[CommentDetails])
  extends PatternMatchingCommandProcessingAggregate[Meeting, MeetingCommand] {
 
-  def this() = this(null, null, null)
+  def this() = this(null, null, null, null)
   override def processCommand: PartialFunction[MeetingCommand, Seq[Event]] = {
     case ScheduleMeetingCommand(groupId, meetingDetails) => Seq(MeetingScheduledEvent(groupId, meetingDetails))
-    case UpdateMeetingDetailsCommand(meetingDetails) => Seq(MeetingDetailsUpdatedEvent(meetingDetails))
+    case UpdateMeetingDetailsCommand(meetingDetails) => Seq(MeetingDetailsUpdatedEvent(groupId, meetingDetails))
     case CommentOnMeetingCommand(commentDetails) => Seq(CommentAddedToMeetingEvent(commentDetails))
     case RsvpToMeetingCommand(rsvpDetails, userId) =>
       rsvpDetails.going match {
@@ -26,8 +27,8 @@ case class Meeting(meetingDetails: MeetingDetails, rsvps: Rsvps, comments: Seq[C
   }
 
   override def applyEvent: PartialFunction[Event, Meeting] = {
-    case MeetingScheduledEvent(groupId, initialMeetingDetails) => copy(meetingDetails = initialMeetingDetails, rsvps = new Rsvps(Seq(), Seq(), Seq()), Seq())
-    case MeetingDetailsUpdatedEvent(updatedMeetingDetails) => copy(meetingDetails = updatedMeetingDetails)
+    case MeetingScheduledEvent(parentGroupId, initialMeetingDetails) => copy(groupId = parentGroupId, meetingDetails = initialMeetingDetails, rsvps = new Rsvps(Seq(), Seq(), Seq()), Seq())
+    case MeetingDetailsUpdatedEvent(groupId, updatedMeetingDetails) => copy(meetingDetails = updatedMeetingDetails)
     case CommentAddedToMeetingEvent(commentDetails) => copy(comments = comments :+ commentDetails)
     case MemberIsComingToMeeting(userId, comment) => copy(rsvps = rsvps.respondYes(userId, comment))
     case MemberRefusedToComeToMeeting(userId, comment) => copy(rsvps = rsvps.respondNo(userId, comment))

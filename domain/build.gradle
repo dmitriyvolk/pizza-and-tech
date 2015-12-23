@@ -13,4 +13,5 @@ dependencies {
 	compile project(":common-events")
 
 	testCompile "org.scalatest:scalatest_2.10:2.2.4"
+	testCompile "net.chrisrichardson.eventstore.client:eventstore-jdbc:$eventStoreClientVersion"
 }

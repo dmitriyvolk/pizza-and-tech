@@ -3,7 +3,7 @@ package net.dmitriyvolk.pizzaandtech.generator
 import java.io.File
 
 import net.dmitriyvolk.pizzaandtech.domain.group.{GroupId, GroupDetails}
-import net.dmitriyvolk.pizzaandtech.domain.meeting.MeetingDetails
+import net.dmitriyvolk.pizzaandtech.domain.meeting.{MeetingIdAndDetails, MeetingDetails}
 import net.dmitriyvolk.pizzaandtech.domain.user.{UserBriefInfo, UserId}
 
 class JsonFileStateUpdater(contentRoot: File, jsonWriter: JsonWriter) extends StateUpdater {
@@ -31,7 +31,7 @@ class JsonFileStateUpdater(contentRoot: File, jsonWriter: JsonWriter) extends St
 
   override def addGroupToMembersList(userId: UserId, groupId: GroupId): Unit = ???
 
-  override def updateMeetingListForGroup(groupId: GroupId, meetingList: Seq[MeetingDetails]): Unit = {
+  override def updateMeetingListForGroup(groupId: GroupId, meetingList: Seq[MeetingIdAndDetails]): Unit = {
     val groupFolder = makeOrGetGroupFolder(groupId)
     val meetingsJson = new File(groupFolder, "meetings.json")
     jsonWriter.writeToFile(meetingsJson, meetingList)

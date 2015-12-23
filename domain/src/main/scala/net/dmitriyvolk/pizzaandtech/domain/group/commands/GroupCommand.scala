@@ -3,7 +3,7 @@ package net.dmitriyvolk.pizzaandtech.domain.group.commands
 import net.chrisrichardson.eventstore.{EntityId, Command}
 import net.dmitriyvolk.pizzaandtech.domain.comment.CommentDetails
 import net.dmitriyvolk.pizzaandtech.domain.group.GroupDetails
-import net.dmitriyvolk.pizzaandtech.domain.meeting.MeetingDetails
+import net.dmitriyvolk.pizzaandtech.domain.meeting.{MeetingId, MeetingDetails}
 import net.dmitriyvolk.pizzaandtech.domain.user.{UserId, UserBriefInfo}
 
 /**
@@ -15,4 +15,5 @@ case class UpdateGroupDetailsCommand(groupDetails: GroupDetails) extends GroupCo
 case class CommentOnGroupCommand(commentDetails: CommentDetails) extends GroupCommand
 case class AcceptUserIntoGroupCommand(userId: UserId, userInfo: UserBriefInfo) extends GroupCommand
 case class ExpellUserFromGroupCommand(userId: UserId) extends GroupCommand
-case class RecordMeetingScheduledCommand(meetingDetails: MeetingDetails) extends GroupCommand
+case class RecordMeetingScheduledCommand(meetingId: MeetingId, meetingDetails: MeetingDetails) extends GroupCommand
+case class RecordMeetingDetailsUpdatedCommand(meetingId: MeetingId, meetingDetails: MeetingDetails) extends GroupCommand
