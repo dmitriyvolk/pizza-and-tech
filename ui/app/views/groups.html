@@ -5,4 +5,29 @@
 			<p>We have groups for everybody, just search for whatever interests you</p>
 		</div>
 	</div>
+  <div class="alert alert-success alert-dismissible" role="alert" ng-show="newGroup.result.$resolved">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <strong>Congratulations!</strong> You group was created. <a class="alert-link" href="#/groups/{{newGroup.result.groupId}}">Go to group</a>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 clas="panel-title">Register group</h4>
+    </div>
+    <div class="panel-body">
+      <p>If you can't find a group that you like, you can always start your own. Build it, and they will come...</p>
+      <form name="newGroupForm" novalidate ng-submit="newGroupForm.$valid && newGroup.submitNewGroupForm()">
+        <div class="form-group">
+          <label for="group-name">Group Name:</label>
+          <input id="group-name" class="form-control" placeholder="Enter group name..." ng-model="newGroup.name" required />
+        </div>
+        <div class="form-group">
+          <label for="group-description">Description:</label>
+          <input id="group-description" class="form-control" placeholder="Enter group description..." ng-model="newGroup.description" required />
+        </div>
+        <button type="submit" class="btn btn-default" ng-disabled="newGroupForm.$invalid">
+          <span class="glyphicon glyphicon-plus-sign"></span> Register
+        </button>
+      </form>
+    </div>
+  </div>
 </div>

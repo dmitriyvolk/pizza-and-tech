@@ -1,12 +1,12 @@
 'use strict';
 (function() {
 	angular.module('patUI')
-	.factory('HomePage', ['$resource', function($resource) {
+	.factory('HomePage', ['$resource', 'dataRoot', function($resource, dataRoot) {
 		return $resource('data', {}, {
 			featuredGroups: {
 				method: 'GET',
 				isArray: true,
-				url: 'data/featuredgroups.json'
+				url: dataRoot + '/featuredgroups.json'
 			}
 		});
 	}]);

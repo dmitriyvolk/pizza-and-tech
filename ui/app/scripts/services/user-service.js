@@ -1,12 +1,12 @@
 'use strict';
 (function() {
 	angular.module('patUI')
-	.factory('User', ['$resource', function($resource) {
-		return $resource('data/users/:userId/user.json', {}, {
+	.factory('User', ['$resource', 'dataRoot', function($resource, dataRoot) {
+		return $resource(dataRoot + '/users/:userId/user.json', {}, {
 			memberOf: {
 				method: 'GET',
 				isArray: true,
-				url: 'data/users/:userId/memberof.json'
+				url: dataRoot + '/users/:userId/memberof.json'
 			}
 		});
 	}]);

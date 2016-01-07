@@ -1,16 +1,16 @@
-<div class="event-container">
+<div class="meeting-container">
 	<div class="row">
 		<div class="col-md-9">
 			<div class="row">
-				<h2>{{event.name}}</h2>
-				<div id="parent-group"><a href="#/groups/{{event.group.id}}">{{event.group.name}}</a></div>
-				<div>{{event.dateStart | date: 'longDate'}}</div>
+				<h2>{{meeting.name}}</h2>
+				<div id="parent-group"><a href="#/groups/{{meeting.groupId}}">{{group.name}}</a></div>
+				<div>{{meeting.dateStart | date: 'longDate'}}</div>
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h4>Agenda</h4>
 					</div>
 					<div class="panel-body">
-						<div uib-collapsed="isDescriptionCollapsed"><p>{{event.description}}></p></div>
+						<div uib-collapsed="isDescriptionCollapsed"><p>{{meeting.description}}</p></div>
 					</div>
 				</div>
 			</div>

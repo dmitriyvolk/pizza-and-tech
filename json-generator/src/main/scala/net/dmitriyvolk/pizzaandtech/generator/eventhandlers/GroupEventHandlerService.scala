@@ -1,16 +1,19 @@
-package net.dmitriyvolk.pizzaandtech.generator.group
+package net.dmitriyvolk.pizzaandtech.generator.eventhandlers
 
 import net.chrisrichardson.eventstore.subscriptions.{EventHandlerMethod, DispatchedEvent, CompoundEventHandler, EventSubscriber}
 import net.dmitriyvolk.pizzaandtech.domain.group.GroupId
 import net.dmitriyvolk.pizzaandtech.domain.group.events.{MeetingListUpdatedEvent, MemberJoinedEvent, GroupDetailsUpdatedEvent, GroupCreatedEvent}
 import net.dmitriyvolk.pizzaandtech.domain.user.UserId
 import net.dmitriyvolk.pizzaandtech.generator.StateUpdater
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Component
 import scala.concurrent.ExecutionContext.Implicits.global
 
 import scala.concurrent.Future
 
+@Component
 @EventSubscriber(id = "groupJsonGeneratorHandlers")
-class GroupEventHandlerService(stateUpdater: StateUpdater) extends CompoundEventHandler {
+class GroupEventHandlerService @Autowired() (stateUpdater: StateUpdater) extends CompoundEventHandler {
 
   @EventHandlerMethod
   def groupCreated(de: DispatchedEvent[GroupCreatedEvent]) = Future {

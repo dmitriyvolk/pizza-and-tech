@@ -1,0 +1,37 @@
+<div class="row">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h2>Schedule new meeting</h2>
+    </div>
+    <form name="newMeetingForm" ng-submit="submitNewMeetingForm()">
+      <div class="panel-body">
+        <div class="row">
+          <div class="form-group col-md-6">
+            <label for="title-input">Title</label>
+            <input id="title-input" ng-model="newMeeting.title" class="form-control" placeholder="Meeting title" required/>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="date-start-input">Date and time</label>
+            <input id="date-start-input" ng-model="newMeeting.startDate" type="datetime-local" class="form-control"/>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col-md-12">
+            <label for="description-input">Description:</label>
+            <textarea id="description-input" ng-model="newMeeting.description" class="form-control" placeholder="Short description of the meeting"
+                      required/>
+          </div>
+        </div>
+      </div>
+      <div class="panel-footer">
+        <button type="submit" class="btn btn-primary">
+          <span class="glyphicon glyphicon-plus"></span>
+          Schedule meeting
+        </button>
+        <a role="button" class="btn btn-default">
+          Cancel
+        </a>
+      </div>
+    </form>
+  </div>
+</div>

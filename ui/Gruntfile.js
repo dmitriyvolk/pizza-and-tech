@@ -89,6 +89,10 @@ module.exports = function (grunt) {
                 '/data',
                 connect.static('./app/fakedata')
               ),
+              connect().use(
+                '/localdata',
+                connect.static('./monolith/data')
+              ),
               connect.static(appConfig.app)
             ];
           }

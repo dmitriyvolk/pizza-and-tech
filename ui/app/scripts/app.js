@@ -8,7 +8,8 @@
  *
  * Main module of the application.
  */
-angular
+(function() {
+  angular
   .module('patUI', [
     'ngCookies',
     'ngMessages',
@@ -28,18 +29,23 @@ angular
         controller: 'AboutCtrl'
       })
       .when('/groups', {
-        templateUrl: 'views/groups.html'
+        templateUrl: 'views/groups.html',
+        controller: 'GroupsCtrl'
       })
       .when('/groups/:id', {
         templateUrl: 'views/group.html',
         controller: 'GroupCtrl'
       })
-      .when('/events', {
-        templateUrl: 'views/events.html'
+      .when('/groups/:groupId/meetings/new', {
+        templateUrl: 'views/meeting-new.html',
+        controller: 'ScheduleMeetingCtrl'
       })
-      .when('/events/:id', {
-        templateUrl: 'views/event.html',
-        controller: 'EventCtrl'
+      .when('/meetings', {
+        templateUrl: 'views/meetings.html'
+      })
+      .when('/meetings/:id', {
+        templateUrl: 'views/meeting.html',
+        controller: 'MeetingCtrl'
       })
       .when('/users', {
         templateUrl: 'views/users.html'
@@ -51,4 +57,7 @@ angular
       .otherwise({
         redirectTo: '/'
       });
-  });
+  })
+  .value('dataRoot', 'localdata')
+  .value('commandSideServiceUrl', 'http://localhost:8080');
+})();

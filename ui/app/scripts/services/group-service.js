@@ -2,27 +2,36 @@
 
 (function() {
 angular.module('patUI')
-.factory('Group', ['$resource', function($resource) {
-	return $resource('data/groups/:groupId/group.json', {}, {
-		futureEvents: {
+.factory('Group', ['$resource', 'dataRoot', 'commandSideServiceUrl', function($resource, dataRoot, commandSideServiceUrl) {
+	return $resource(dataRoot + '/groups/:groupId/group.json', {}, {
+	  newGroup: {
+	    url: commandSideServiceUrl + '/groups',
+	    method: 'POST'
+	  },
+		futureMeetings: {
 			method: 'GET',
 			isArray: true,
-			url: 'data/groups/:groupId/futureevents.json'
+			url: dataRoot + '/groups/:groupId/futuremeetings.json'
 		},
-		pastEvents: {
+		pastMeetings: {
 			method: 'GET',
 			isArray: true,
-			url: 'data/groups/:groupId/pastevents.json'
+			url: dataRoot + '/groups/:groupId/pastmeetings.json'
+		},
+		meetings: {
+		  method: 'GET',
+		  isArray: true,
+		  url: dataRoot + '/groups/:groupId/meetings.json'
 		},
 		members: {
 			method: 'GET',
 			isArray: true,
-			url: 'data/groups/:groupId/members.json'
+			url: dataRoot + '/groups/:groupId/members.json'
 		},
 		comments: {
 			method: 'GET',
 			isArray: true,
-			url: 'data/groups/:groupId/comments.json'
+			url: dataRoot + '/groups/:groupId/comments.json'
 		}
 	});
 }]);

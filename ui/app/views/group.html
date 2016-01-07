@@ -12,13 +12,17 @@
 		<div class="row">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					<h4>Upcoming events</h4>
+					<h4>Upcoming meetings
+            <a role="button" class="btn btn-primary pull-right" href="#/groups/{{groupId}}/meetings/new">
+              <span class="glyphicon glyphicon-plus"></span>Schedule meeting
+            </a>
+          </h4>
 				</div>
 				<div class="panel-body">
 					<ul class="list-group">
-						<li class="list-group-item" ng-repeat="event in futureEvents">
-								<a href="#/events/{{event.id}}">{{event.name}}</a>
-								<br/>{{event.dateStart | date : 'longDate'}}
+						<li class="list-group-item" ng-repeat="meeting in allMeetings | filter: isInTheFuture">
+								<a href="#/meetings/{{meeting.id}}">{{meeting.name}}</a>
+								<br/>{{meeting.startDate | date : 'longDate'}}
 						</li>
 					</ul>
 				</div>
@@ -27,13 +31,13 @@
 		<div class="row">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					<h4>Past events</h4>
+					<h4>Past meetings</h4>
 				</div>
 				<div class="panel-body">
 					<ul class="list-group">
-						<li class="list-group-item" ng-repeat="event in pastEvents">
-								<a href="#/events/{{event.id}}">{{event.name}}</a>
-								<br/>{{event.dateStart | date : 'longDate'}}
+						<li class="list-group-item" ng-repeat="meeting in allMeetings | filter: isInThePast">
+								<a href="#/meetings/{{meeting.id}}">{{meeting.name}}</a>
+								<br/>{{meeting.dateStart | date : 'longDate'}}
 						</li>
 					</ul>
 				</div>
