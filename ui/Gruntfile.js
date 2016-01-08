@@ -15,6 +15,9 @@ module.exports = function (grunt) {
   // Time how long tasks take. Can help when optimizing build times
   require('time-grunt')(grunt);
 
+  // Load grunt-replace for the env-config
+  grunt.loadNpmTasks('grunt-replace');
+
   // Configurable paths for the application
   var appConfig = {
     app: require('./bower.json').appPath || 'app',
@@ -310,6 +313,36 @@ module.exports = function (grunt) {
     //   dist: {}
     // },
 
+    replace: {
+      development: {
+        options: {
+          patterns: [{
+            json: grunt.file.readJSON('./config/environments/development.json')
+          }]
+        },
+        files: [{
+          expand: true,
+          flatten: true,
+          src: ['./config/config.js'],
+          dest: '<%= yeoman.app %>/generated/scripts/services/'
+        }]
+      },
+      production: {
+        options: {
+          patterns: [{
+            json: grunt.file.readJSON('./config/environments/production.json')
+          }]
+        },
+        files: [{
+          expand: true,
+          flatten: true,
+          src: ['./config/config.js'],
+          dest: '<%= yeoman.app %>/generated/scripts/services/'
+        }]
+      }
+    },
+
+
     imagemin: {
       dist: {
         files: [{
@@ -439,6 +472,7 @@ module.exports = function (grunt) {
     grunt.task.run([
       'clean:server',
       'wiredep',
+      'replace:development',
       'concurrent:server',
       'autoprefixer:server',
       'connect:livereload',
@@ -464,6 +498,7 @@ module.exports = function (grunt) {
     'clean:dist',
     'wiredep',
     'useminPrepare',
+    'replace:production',
     'concurrent:dist',
     'autoprefixer',
     'concat',

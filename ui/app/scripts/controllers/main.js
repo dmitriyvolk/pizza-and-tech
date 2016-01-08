@@ -8,8 +8,9 @@
  */
 (function() {
 angular.module('patUI')
-  .controller('MainCtrl', ['$rootScope', '$scope', 'HomePage', function ($rootScope, $scope, HomePage) {
+  .controller('MainCtrl', ['$rootScope', '$scope', 'patConfig', 'HomePage', function ($rootScope, $scope, patConfig, HomePage) {
   	$rootScope.activeTab = 'home';
   	$scope.featuredGroups = HomePage.featuredGroups();
+  	$rootScope.patEnv = patConfig.environment;
   }]);
 })();
