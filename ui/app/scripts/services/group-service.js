@@ -2,7 +2,9 @@
 
 (function() {
 angular.module('patUI')
-.factory('Group', ['$resource', 'dataRoot', 'commandSideServiceUrl', function($resource, dataRoot, commandSideServiceUrl) {
+.factory('Group', ['$resource', 'patConfig', function($resource, patConfig) {
+  var dataRoot = patConfig.dataRoot;
+  var commandSideServiceUrl = patConfig.commandSideServiceUrl;
 	return $resource(dataRoot + '/groups/:groupId/group.json', {}, {
 	  newGroup: {
 	    url: commandSideServiceUrl + '/groups',

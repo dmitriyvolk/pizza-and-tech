@@ -2,7 +2,9 @@
 
 (function() {
 	angular.module('patUI')
-	.factory('Meeting', ['$resource', 'dataRoot', 'commandSideServiceUrl', function($resource, dataRoot, commandSideServiceUrl) {
+	.factory('Meeting', ['$resource', 'patConfig', function($resource, patConfig) {
+	  var dataRoot = patConfig.dataRoot;
+	  var commandSideServiceUrl = patConfig.commandSideServiceUrl;
 		return $resource(dataRoot + '/meetings/:meetingId/meeting.json', {}, {
 			rsvps: {
 				method: 'GET',

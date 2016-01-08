@@ -58,6 +58,9 @@
         redirectTo: '/'
       });
   })
-  .value('dataRoot', 'localdata')
-  .value('commandSideServiceUrl', 'http://localhost:8080');
+  .constant('patConfig', {
+//  dataRoot:  'localdata',
+    dataRoot: 'http://pizza-and-tech-test-data.s3-website-us-east-1.amazonaws.com',
+    commandSideServiceUrl: 'http://localhost:8080'
+  });
 })();

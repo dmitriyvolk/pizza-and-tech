@@ -1,0 +1,8 @@
+apply plugin: 'scala'
+
+dependencies {
+    compile project(":json-generator")
+    compile "com.github.seratch:awscala_2.10:0.5.4"
+
+    testCompile scalaTestDependency
+}

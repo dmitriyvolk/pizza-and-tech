@@ -25,7 +25,7 @@ class CommandSideConfiguration {
   def corsConfigurer: WebMvcConfigurer = {
     new WebMvcConfigurerAdapter {
       override def addCorsMappings(registry: CorsRegistry): Unit =
-        registry.addMapping("/**").allowedOrigins("http://localhost:9000")
+        registry.addMapping("/**").allowedOrigins("http://localhost:9000", "http://pizza-and-tech-test.s3-website-us-east-1.amazonaws.com", "http://pizza-and-tech.s3-website-us-east-1.amazonaws.com/")
     }
   }
 

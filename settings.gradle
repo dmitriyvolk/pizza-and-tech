@@ -2,5 +2,7 @@ include 'common-events'
 include 'domain'
 include 'command-side-service'
 include 'json-generator'
+include 's3-data-writer'
+include 'end-to-end'
 
 rootProject.name = 'pizzaandtech'

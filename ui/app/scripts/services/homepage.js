@@ -1,7 +1,8 @@
 'use strict';
 (function() {
 	angular.module('patUI')
-	.factory('HomePage', ['$resource', 'dataRoot', function($resource, dataRoot) {
+	.factory('HomePage', ['$resource', 'patConfig', function($resource, patConfig) {
+	  var dataRoot = patConfig.dataRoot;
 		return $resource('data', {}, {
 			featuredGroups: {
 				method: 'GET',

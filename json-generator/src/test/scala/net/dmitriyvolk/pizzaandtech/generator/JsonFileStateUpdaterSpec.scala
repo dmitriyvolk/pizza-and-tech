@@ -8,8 +8,9 @@ class JsonFileStateUpdaterSpec extends FeatureSpec with Matchers with GivenWhenT
   val contentRoot = java.io.File.createTempFile("p-a-t-", "-json")
   contentRoot.mkdir()
 
-  val jsonWriter:JsonWriter = ???
+  val dataWriter = new FilesystemDataWriter(contentRoot)
+  val ser = new JacksonJsonSerializer
 
-  val service = new GroupEventHandlerService(new JsonFileStateUpdater(jsonWriter))
+  val service = new GroupEventHandlerService(new JsonFileStateUpdater(ser, dataWriter))
 
 }

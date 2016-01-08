@@ -1,0 +1,7 @@
+apply plugin: 'scala'
+
+dependencies {
+    compile "net.chrisrichardson.eventstore.client:eventstore-jdbc:$eventStoreClientVersion"
+    compile project(":s3-data-writer")
+    compile project(":command-side-service")
+}
