@@ -1,7 +1,7 @@
 'use strict';
 (function(){
   angular.module('patUI')
-  .controller('ScheduleMeetingCtrl', ['$scope', '$routeParams', 'Meeting', function ($scope, $routeParams, Meeting) {
+  .controller('ScheduleMeetingCtrl', ['$scope', '$routeParams', '$location', 'Meeting', function ($scope, $routeParams, $location, Meeting) {
 
     var groupId = $routeParams.groupId;
     $scope.newMeeting = {};
@@ -16,7 +16,18 @@
         }
       };
       console.dir(data);
-      $scope.newMeetingResult = Meeting.newMeeting(data);
+      Meeting
+        .newMeeting(data)
+        .$promise
+        .then(function(result) {
+          $location.path('/meetings/' + result.meetingId);
+        }, function(error) {
+          if (error.status === -1) {
+            $scope.newMeeting.error = 'can\'t reach server';
+          } else {
+            $scope.newMeeting.error = error.statusText;
+          }
+        });
     };
   }]);
 })();

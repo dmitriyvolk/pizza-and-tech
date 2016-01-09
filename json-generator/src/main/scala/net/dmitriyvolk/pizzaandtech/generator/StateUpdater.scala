@@ -1,16 +1,17 @@
 package net.dmitriyvolk.pizzaandtech.generator
 
-import net.dmitriyvolk.pizzaandtech.domain.group.{GroupId, GroupDetails}
+import net.dmitriyvolk.pizzaandtech.domain.group.{GroupIdAndDetails, GroupId, GroupDetails}
 import net.dmitriyvolk.pizzaandtech.domain.meeting.{MeetingId, MeetingIdAndDetails, MeetingDetails}
-import net.dmitriyvolk.pizzaandtech.domain.user.{UserBriefInfo, UserId}
+import net.dmitriyvolk.pizzaandtech.domain.user.{UserIdAndBriefInfo, UserBriefInfo, UserId}
 
 trait StateUpdater {
+  def createOrUpdateUser(userId: UserId, briefInfo: UserBriefInfo)
 
   def createOrUpdateMeeting(meetingId: MeetingId, groupId: GroupId, meetingDetails: MeetingDetails)
 
-  def addGroupToMembersList(userId: UserId, groupId: GroupId)
+  def updateMemberListForGroup(groupId: GroupId, members: Seq[UserIdAndBriefInfo])
 
-  def addMemberToGroup(groupId: GroupId, memberId: UserId)
+  def updateGroupListForUser(userId: UserId, groups: Seq[GroupIdAndDetails])
 
   def createOrUpdateGroup(groupId: GroupId, groupDetails: GroupDetails)
 

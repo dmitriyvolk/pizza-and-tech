@@ -1,14 +1,13 @@
 package net.dmitriyvolk.pizzaandtech.generator.eventhandlers
 
-import net.chrisrichardson.eventstore.subscriptions.{EventHandlerMethod, DispatchedEvent, CompoundEventHandler, EventSubscriber}
+import net.chrisrichardson.eventstore.subscriptions.{CompoundEventHandler, DispatchedEvent, EventHandlerMethod, EventSubscriber}
 import net.dmitriyvolk.pizzaandtech.domain.group.GroupId
-import net.dmitriyvolk.pizzaandtech.domain.group.events.{MeetingListUpdatedEvent, MemberJoinedEvent, GroupDetailsUpdatedEvent, GroupCreatedEvent}
-import net.dmitriyvolk.pizzaandtech.domain.user.UserId
+import net.dmitriyvolk.pizzaandtech.domain.group.events._
 import net.dmitriyvolk.pizzaandtech.generator.StateUpdater
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
-import scala.concurrent.ExecutionContext.Implicits.global
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Component
@@ -26,11 +25,8 @@ class GroupEventHandlerService @Autowired() (stateUpdater: StateUpdater) extends
   }
 
   @EventHandlerMethod
-  def userJoinedGroup(de: DispatchedEvent[MemberJoinedEvent]) = Future {
-    val groupId: GroupId = GroupId(de.entityId)
-    val userId: UserId = UserId(de.event.memberId)
-    stateUpdater.addMemberToGroup(groupId, userId)
-    stateUpdater.addGroupToMembersList(userId, groupId)
+  def memberListUpdated(de: DispatchedEvent[UserListForGroupUpdatedEvent]) = Future {
+    stateUpdater.updateMemberListForGroup(GroupId(de.entityId), de.event.users)
   }
 
   @EventHandlerMethod

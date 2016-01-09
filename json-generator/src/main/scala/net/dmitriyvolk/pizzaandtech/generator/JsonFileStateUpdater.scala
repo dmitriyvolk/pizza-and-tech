@@ -7,9 +7,9 @@ import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
 import com.fasterxml.jackson.datatype.joda.JodaModule
 import net.dmitriyvolk.pizzaandtech.domain.EntityIdWrapper
-import net.dmitriyvolk.pizzaandtech.domain.group.{GroupDetails, GroupId}
+import net.dmitriyvolk.pizzaandtech.domain.group.{GroupIdAndDetails, GroupDetails, GroupId}
 import net.dmitriyvolk.pizzaandtech.domain.meeting.{MeetingDetails, MeetingId, MeetingIdAndDetails}
-import net.dmitriyvolk.pizzaandtech.domain.user.{UserBriefInfo, UserId}
+import net.dmitriyvolk.pizzaandtech.domain.user.{UserIdAndBriefInfo, UserBriefInfo, UserId}
 import net.dmitriyvolk.pizzaandtech.generator.DataWriter.DataPath
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -24,10 +24,6 @@ class JsonFileStateUpdater @Autowired() (
 
   implicit def entityIdToString[T <: EntityIdWrapper](entityId: T): String = entityId.entityId.id
 
-  override def addMemberToGroup(groupId: GroupId, memberId: UserId): Unit = {
-
-  }
-
   override def createOrUpdateGroup(groupId: GroupId, groupDetails: GroupDetails): Unit = {
     write(groupFolder(groupId), "group.json", groupDetails)
   }
@@ -37,10 +33,10 @@ class JsonFileStateUpdater @Autowired() (
 
   def meetingFolder(meetingId: String) = DataPath(s"meetings/$meetingId")
 
+  def userFolder(userId: String) = DataPath(s"users/$userId")
+
   def write(folder: DataPath, filename: String, data: AnyRef) =
     dataWriter.writeJsonData(folder, filename, serializer.toJson(data))
-
-  override def addGroupToMembersList(userId: UserId, groupId: GroupId): Unit = ???
 
   override def updateMeetingListForGroup(groupId: GroupId, meetingList: Seq[MeetingIdAndDetails]): Unit = {
     write(groupFolder(groupId), "meetings.json", meetingList)
@@ -53,6 +49,16 @@ class JsonFileStateUpdater @Autowired() (
   override def createOrUpdateMeeting(meetingId: MeetingId, groupId: GroupId, meetingDetails: MeetingDetails): Unit = {
     write(meetingFolder(meetingId), "meeting.json", MeetingDetailsAndGroupId(groupId, meetingDetails))
   }
+
+  override def updateMemberListForGroup(groupId: GroupId, members: Seq[UserIdAndBriefInfo]): Unit = {
+    write(groupFolder(groupId), "members.json", members)
+  }
+
+  override def updateGroupListForUser(userId: UserId, groups: Seq[GroupIdAndDetails]): Unit =
+    write(userFolder(userId), "memberof.json", groups)
+
+  override def createOrUpdateUser(userId: UserId, briefInfo: UserBriefInfo): Unit =
+    write(userFolder(userId), "user.json", UserIdAndBriefInfo(userId, briefInfo))
 }
 
 object JsonFileStateUpdater {
@@ -71,6 +77,16 @@ object PizzaAndTechModule extends SimpleModule {
   addSerializer(classOf[MeetingId], new EntityIdWrapperSerializer[MeetingId])
   addSerializer(classOf[GroupId], new EntityIdWrapperSerializer[GroupId])
   addSerializer(classOf[UserId], new EntityIdWrapperSerializer[UserId])
+
+  addSerializer(new JsonSerializer[GroupIdAndDetails] {
+    override def serialize(value: GroupIdAndDetails, gen: JsonGenerator, serializers: SerializerProvider): Unit =
+      gen.writeObject(Map(
+        ("id", value.groupId),
+        ("name", value.groupDetails.name)
+      ))
+
+    override def handledType(): Class[GroupIdAndDetails] = classOf[GroupIdAndDetails]
+  })
 
   addSerializer(new JsonSerializer[MeetingIdAndDetails]() {
     override def serialize(value: MeetingIdAndDetails, gen: JsonGenerator, serializers: SerializerProvider): Unit = {
@@ -97,6 +113,17 @@ object PizzaAndTechModule extends SimpleModule {
         ("startDate", value.meetingDetails.startDate)
       ))
     }
+  })
+
+  addSerializer(new JsonSerializer[UserIdAndBriefInfo] {
+    override def serialize(value: UserIdAndBriefInfo, gen: JsonGenerator, serializers: SerializerProvider): Unit =
+      gen.writeObject(Map(
+        ("id", value.userId),
+        ("name", value.briefInfo.fullName),
+        ("username", value.briefInfo.username)
+      ))
+
+    override def handledType(): Class[UserIdAndBriefInfo] = classOf[UserIdAndBriefInfo]
   })
 
   class EntityIdWrapperSerializer[T <: EntityIdWrapper] extends JsonSerializer[T] {

@@ -9,7 +9,7 @@
 			scope: {
 				user: '='
 			},
-			template: '<a href="#/users/{{user.id}}">{{user.displayName}}</a>'
+			template: '<a href="#/users/{{user.id}}">{{user.name}}</a>'
 		};
 	})
 	.directive('patComment', function() {

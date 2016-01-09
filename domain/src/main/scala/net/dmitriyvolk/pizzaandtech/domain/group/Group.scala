@@ -19,8 +19,8 @@ case class Group(groupDetails: GroupDetails, comments: Seq[CommentDetails], meet
   def userLeaves(userId: UserId) = users.filter(_.userId != userId)
 
   override def processCommand: PartialFunction[GroupCommand, Seq[Event]] = {
-    case RegisterNewGroupCommand(groupDetails) =>
-      Seq(GroupCreatedEvent(groupDetails))
+    case RegisterNewGroupCommand(UserIdAndBriefInfo(userId, userInfo), groupDetails) =>
+      Seq(GroupCreatedEvent(groupDetails), UserAcceptedIntoGroupEvent(userId, groupDetails), UserListForGroupUpdatedEvent(userJoins(userId, userInfo)))
     case UpdateGroupDetailsCommand(groupDetails) =>
       Seq(GroupDetailsUpdatedEvent(groupDetails))
     case CommentOnGroupCommand(commentDetails) =>
@@ -40,5 +40,6 @@ case class Group(groupDetails: GroupDetails, comments: Seq[CommentDetails], meet
     case GroupDetailsUpdatedEvent(updatedGroupDetails) => copy(groupDetails = updatedGroupDetails)
     case CommentAddedEvent(commentDetails) => copy(comments = comments :+ commentDetails)
     case MeetingListUpdatedEvent(updatedMeetingList) => copy(meetings = updatedMeetingList)
+    case _ => this
   }
 }

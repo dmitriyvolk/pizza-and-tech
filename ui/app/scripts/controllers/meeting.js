@@ -9,25 +9,47 @@
  */
 (function(){
 	angular.module('patUI')
-	.controller('MeetingCtrl', ['$rootScope', '$scope', '$routeParams', 'Meeting', 'Group', function ($rootScope, $scope, $routeParams, Meeting, Group) {
+	.controller('MeetingCtrl', ['$rootScope', '$scope', '$routeParams', '$location', 'Meeting', 'Group', function ($rootScope, $scope, $routeParams, $location, Meeting, Group) {
 		$rootScope.activeTab = 'meetings';
 		var meetingId = $routeParams.id;
-//		$scope.meeting = Meeting.get({meetingId: meetingId});
-//		$scope.group = Group.get({groupId: $scope.meeting.groupId});
-    Meeting.get({meetingId: meetingId}, function(data) {
-      $scope.meeting = data;
-    }).$promise.then(function(meeting){
-      console.dir(meeting);
-      Group.get({groupId: meeting.groupId}, function(data){
-        $scope.group = data;
+
+    Meeting
+      .get({meetingId: meetingId}, function(data) {
+        $scope.meeting = data;
+      })
+      .$promise
+      .then(function(meeting) {
+        Group.get({groupId: meeting.groupId}, function(data){
+          $scope.group = data;
+        });
       });
-    });
+
 		$scope.rsvps = Meeting.rsvps({meetingId: meetingId});
 		$scope.comments = Meeting.comments({meetingId: meetingId});
 
 		$scope.isDescriptionCollapsed = true;
 		$scope.toggleIsDescriptionCollapsed = function() {
 			$scope.isDescriptionCollapsed = !$scope.isDescriptionCollapsed;
+		};
+
+		$scope.deleteMeeting = function() {
+      Meeting
+        .deleteMeeting({meetingId: meetingId})
+        .$promise
+        .then(function() {
+            $location.path('/groups/' + $scope.group.id);
+          }, function(error) {
+            if (error.status === -1) {
+              $scope.error = 'can\'t reach server';
+            } else {
+              $scope.error = error.statusText;
+            }
+          }
+        );
+		};
+
+		$scope.dismissDeleteMeetingAlert = function() {
+		  $scope.error = '';
 		};
 	}]);
 })();

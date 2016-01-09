@@ -1,10 +1,45 @@
 <div class="meeting-container">
+  <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="deleteMeetingLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="deleteMeetingLabel">Delete meeting?</h4>
+        </div>
+        <div class="modal-body">
+          <p class="text-warning">
+            <span class="glyphicon glyphicon-question-sign"></span>
+            Do you really want to delete <strong>{{meeting.name}}</strong>?
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" ng-click="deleteMeeting()" data-dismiss="modal">Delete</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="alert alert-danger alert-dismissible" role="alert" ng-show="error">
+    <button type="button" class="close" aria-label="Close" ng-click="dismissDeleteMeetingAlert()"><span aria-hidden="true">&times;</span></button>
+    <strong>Oops!</strong> There was an error deleting your meeting: {{ error }}.
+  </div>
 	<div class="row">
 		<div class="col-md-9">
+      <div class="row">
+        <h2>{{meeting.name}}</h2>
+      </div>
+      <div class="row">
+        <div class="col-md-10">
+          <div id="parent-group"><a href="#/groups/{{meeting.groupId}}">{{group.name}}</a></div>
+          <div>{{meeting.dateStart | date: 'longDate'}}</div>
+        </div>
+        <div class="col-md-2">
+          <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#confirmDeleteModal">
+            <span class="glyphicon glyphicon-remove"></span>Delete
+          </button>
+        </div>
+      </div>
 			<div class="row">
-				<h2>{{meeting.name}}</h2>
-				<div id="parent-group"><a href="#/groups/{{meeting.groupId}}">{{group.name}}</a></div>
-				<div>{{meeting.dateStart | date: 'longDate'}}</div>
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h4>Agenda</h4>

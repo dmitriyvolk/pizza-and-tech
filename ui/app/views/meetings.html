@@ -1,8 +1,21 @@
 <div class="row">
-	<h2>Meetings</h2>
-	<div class="panel panel-default">
-		<div class="panel-body">
-			<p>Meetings cover wide range of topics, blah-blah</p>
-		</div>
-	</div>
+  <h2>Meetings</h2>
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <p>Meetings cover wide range of topics, depending on the group.</p>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">Your upcoming meetings</h4>
+    </div>
+    <table class="table">
+      <tbody>
+      <tr ng-repeat="meeting in upcomingMeetings">
+        <td><a href="#/meetings/{{meeting.id}}">{{meeting.name}}</a></td>
+        <td>{{meeting.startDate | date: 'longDate'}}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

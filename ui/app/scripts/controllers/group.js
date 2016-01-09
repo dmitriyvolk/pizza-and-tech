@@ -10,7 +10,7 @@
   angular.module('patUI')
   .controller('GroupCtrl', ['$rootScope', '$scope', '$routeParams', 'Group', function ($rootScope, $scope, $routeParams, Group) {
 
-    $rootScope.activeTab = 'group1';
+    $rootScope.activeTab = 'groups';
     var groupId = $routeParams.id;
     $scope.groupId = groupId;
     var now = new Date();

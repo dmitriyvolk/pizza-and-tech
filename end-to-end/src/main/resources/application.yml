@@ -1,0 +1,6 @@
+app:
+  name: Pizza And Tech
+  description: Demo app for http://eventuate.io. Shows a way to pre-render entity data in JSON format, allowing the app to be accessible in read-only mode even when the server is down.
+  config:
+    dataBucket:
+      name: pizza-and-tech-test-data

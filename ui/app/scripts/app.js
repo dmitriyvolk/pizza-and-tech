@@ -42,7 +42,8 @@
         controller: 'ScheduleMeetingCtrl'
       })
       .when('/meetings', {
-        templateUrl: 'views/meetings.html'
+        templateUrl: 'views/meetings.html',
+        controller: 'MeetingsCtrl'
       })
       .when('/meetings/:id', {
         templateUrl: 'views/meeting.html',
@@ -54,6 +55,10 @@
       .when('/users/:id', {
         templateUrl: 'views/user.html',
         controller: 'UserCtrl'
+      })
+      .when('/profile', {
+        templateUrl: 'views/profile.html',
+        controller: 'ProfileCtrl'
       })
       .otherwise({
         redirectTo: '/'

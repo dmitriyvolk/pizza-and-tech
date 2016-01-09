@@ -18,6 +18,10 @@
 			newMeeting: {
 			  method: 'POST',
 			  url: commandSideServiceUrl + '/meetings/'
+			},
+			deleteMeeting: {
+			  method: 'DELETE',
+			  url: commandSideServiceUrl + '/meetings/:meetingId'
 			}
 		});
 	}]);

@@ -13,7 +13,7 @@ class UserEventHandlers(implicit eventStore: EventStore) {
 
   @EventHandler
   val recordGroupAcceptance = handlerForEvent[UserAcceptedIntoGroupEvent] { de =>
-    existingEntity(de.event.userId) <== RecordAcceptanceIntoGroupCommand(GroupId(de.entityId), de.event.groupDetails)
+    existingEntity[User](de.event.userId) <== RecordAcceptanceIntoGroupCommand(GroupId(de.entityId), de.event.groupDetails)
   }
 
 }

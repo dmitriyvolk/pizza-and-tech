@@ -3,6 +3,10 @@
     <div class="panel-heading">
       <h2>Schedule new meeting</h2>
     </div>
+    <div class="alert alert-danger alert-dismissible" role="alert" ng-show="newMeeting.error">
+      <button type="button" class="close" aria-label="Close" ng-click="dismissNewMeetingAlert()"><span aria-hidden="true">&times;</span></button>
+      <strong>Oops!</strong> There was an error creating your new meeting: {{ newMeeting.error }}.
+    </div>
     <form name="newMeetingForm" ng-submit="submitNewMeetingForm()">
       <div class="panel-body">
         <div class="row">

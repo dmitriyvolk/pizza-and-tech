@@ -5,13 +5,13 @@
 			<p>We have groups for everybody, just search for whatever interests you</p>
 		</div>
 	</div>
-  <div class="alert alert-success alert-dismissible" role="alert" ng-show="newGroup.result.$resolved">
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-    <strong>Congratulations!</strong> You group was created. <a class="alert-link" href="#/groups/{{newGroup.result.groupId}}">Go to group</a>
+  <div class="alert alert-danger alert-dismissible" role="alert" ng-show="newGroup.error">
+    <button type="button" class="close" aria-label="Close" ng-click="dismissNewGroupAlert()"><span aria-hidden="true">&times;</span></button>
+    <strong>Oops!</strong> There was an error creating your new group: {{ newGroup.error }}.
   </div>
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h4 clas="panel-title">Register group</h4>
+      <h4 class="panel-title">Register group</h4>
     </div>
     <div class="panel-body">
       <p>If you can't find a group that you like, you can always start your own. Build it, and they will come...</p>

@@ -1,0 +1,29 @@
+<div class="row">
+  <h2>{{user.name}}</h2>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">Your upcoming meetings</h4>
+    </div>
+    <table class="table">
+      <tbody>
+        <tr ng-repeat="meeting in upcomingMeetings">
+          <td><a href="#/meetings/{{meeting.id}}">{{meeting.name}}</a></td>
+          <td>{{meeting.startDate | date: 'longDate'}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">Your groups</h4>
+    </div>
+    <table class="table">
+      <tbody>
+        <tr ng-repeat="group in groups">
+          <td><a href="#/groups/{{group.id}}">{{group.name}}</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

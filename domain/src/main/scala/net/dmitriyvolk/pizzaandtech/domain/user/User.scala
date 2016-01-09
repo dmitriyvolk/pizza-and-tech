@@ -30,6 +30,7 @@ case class User(briefInfo: UserBriefInfo, groups: Seq[GroupIdAndDetails])
   override def applyEvent: PartialFunction[Event, User] = {
     case NewUserRegisteredEvent(newUserBriefInfo) => copy(briefInfo = newUserBriefInfo)
     case GroupListOfUserUpdatedEvent(updatedGroups) => copy(groups = updatedGroups)
+    case _ => this
   }
 }
 
