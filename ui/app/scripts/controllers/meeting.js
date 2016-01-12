@@ -13,19 +13,26 @@
 		$rootScope.activeTab = 'meetings';
 		var meetingId = $routeParams.id;
 
-    Meeting
-      .get({meetingId: meetingId}, function(data) {
-        $scope.meeting = data;
-      })
-      .$promise
-      .then(function(meeting) {
-        Group.get({groupId: meeting.groupId}, function(data){
-          $scope.group = data;
-        });
-      });
+    function load() {
 
-		$scope.rsvps = Meeting.rsvps({meetingId: meetingId});
-		$scope.comments = Meeting.comments({meetingId: meetingId});
+      Meeting
+        .get({meetingId: meetingId}, function(data) {
+          $scope.meeting = data;
+        })
+        .$promise
+        .then(function(meeting) {
+          Group.get({groupId: meeting.groupId}, function(data){
+            $scope.group = data;
+          });
+        });
+
+      $scope.rsvps = Meeting.rsvps({meetingId: meetingId});
+      loadComments();
+		}
+
+		function loadComments() {
+		  $scope.comments = Meeting.comments({meetingId: meetingId});
+		}
 
 		$scope.isDescriptionCollapsed = true;
 		$scope.toggleIsDescriptionCollapsed = function() {
@@ -51,5 +58,21 @@
 		$scope.dismissDeleteMeetingAlert = function() {
 		  $scope.error = '';
 		};
+
+		$scope.newComment = {};
+
+		$scope.addMeetingComment = function() {
+		  Meeting
+		  .newComment({meetingId: meetingId}, { text: $scope.newComment.text })
+		  .$promise
+		  .then(function() {
+		    $scope.newComment.text = '';
+		    loadComments();
+		  }, function(error) {
+		    console.log('Error ' + error);
+		  });
+		};
+
+		load();
 	}]);
 })();

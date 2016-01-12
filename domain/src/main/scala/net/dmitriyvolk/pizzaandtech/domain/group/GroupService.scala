@@ -6,6 +6,7 @@ import net.dmitriyvolk.pizzaandtech.domain.Implicits._
 import net.dmitriyvolk.pizzaandtech.domain.authentication.AuthenticationService
 import net.dmitriyvolk.pizzaandtech.domain.comment.CommentDetails
 import net.dmitriyvolk.pizzaandtech.domain.group.commands._
+import org.joda.time.DateTime
 
 class GroupService(authenticationService: AuthenticationService)(implicit eventStore: EventStore) {
 
@@ -15,7 +16,7 @@ class GroupService(authenticationService: AuthenticationService)(implicit eventS
 
   def updateGroupInfo(groupId: GroupId, groupDetails: GroupDetails) = existingEntity[Group](groupId) <== UpdateGroupDetailsCommand(groupDetails)
 
-  def commentOnGroup(groupId: GroupId, commentDetails: CommentDetails) = existingEntity[Group](groupId) <== CommentOnGroupCommand(commentDetails)
+  def commentOnGroup(groupId: GroupId, commentText: String) = existingEntity[Group](groupId) <== CommentOnGroupCommand(CommentDetails(currentUser.userId, currentUser.briefInfo.fullName, commentText, new DateTime()))
 
 
 }

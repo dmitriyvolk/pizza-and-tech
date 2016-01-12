@@ -34,6 +34,10 @@ angular.module('patUI')
 			method: 'GET',
 			isArray: true,
 			url: dataRoot + '/groups/:groupId/comments.json'
+		},
+		newComment: {
+		  method: 'POST',
+		  url: commandSideServiceUrl + '/groups/:groupId/comments'
 		}
 	});
 }]);

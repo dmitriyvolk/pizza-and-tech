@@ -14,10 +14,13 @@ case class Meeting(groupId: GroupId, meetingDetails: MeetingDetails, rsvps: Rsvp
  extends PatternMatchingCommandProcessingAggregate[Meeting, MeetingCommand] {
 
   def this() = this(null, null, null, null)
+
+  def addComment(commentDetails: CommentDetails) = comments :+ commentDetails
+
   override def processCommand: PartialFunction[MeetingCommand, Seq[Event]] = {
     case ScheduleMeetingCommand(groupId, meetingDetails) => Seq(MeetingScheduledEvent(groupId, meetingDetails))
     case UpdateMeetingDetailsCommand(meetingDetails) => Seq(MeetingDetailsUpdatedEvent(groupId, meetingDetails))
-    case CommentOnMeetingCommand(commentDetails) => Seq(CommentAddedToMeetingEvent(commentDetails))
+    case CommentOnMeetingCommand(commentDetails) => Seq(CommentAddedToMeetingEvent(commentDetails), CommentListForMeetingUpdatedEvent(addComment(commentDetails)))
     case RsvpToMeetingCommand(rsvpDetails, userId) =>
       rsvpDetails.going match {
         case Yes => Seq(MemberIsComingToMeeting(userId, rsvpDetails.comment))
@@ -29,10 +32,11 @@ case class Meeting(groupId: GroupId, meetingDetails: MeetingDetails, rsvps: Rsvp
   override def applyEvent: PartialFunction[Event, Meeting] = {
     case MeetingScheduledEvent(parentGroupId, initialMeetingDetails) => copy(groupId = parentGroupId, meetingDetails = initialMeetingDetails, rsvps = new Rsvps(Seq(), Seq(), Seq()), Seq())
     case MeetingDetailsUpdatedEvent(groupId, updatedMeetingDetails) => copy(meetingDetails = updatedMeetingDetails)
-    case CommentAddedToMeetingEvent(commentDetails) => copy(comments = comments :+ commentDetails)
+    case CommentListForMeetingUpdatedEvent(updatedCommentList) => copy(comments = updatedCommentList)
     case MemberIsComingToMeeting(userId, comment) => copy(rsvps = rsvps.respondYes(userId, comment))
     case MemberRefusedToComeToMeeting(userId, comment) => copy(rsvps = rsvps.respondNo(userId, comment))
     case MemberWillDecideLaterWhetherToComeToMeeting(userId, comment) => copy(rsvps = rsvps.respondMaybe(userId, comment))
+    case _ => this
   }
 }
 

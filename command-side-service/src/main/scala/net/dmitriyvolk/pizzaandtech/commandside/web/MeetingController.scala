@@ -1,16 +1,15 @@
 package net.dmitriyvolk.pizzaandtech.commandside.web
 
-import net.dmitriyvolk.pizzaandtech.domain.comment.CommentDetails
+import net.dmitriyvolk.pizzaandtech.commandside.web.WebImplicits._
 import net.dmitriyvolk.pizzaandtech.domain.group.GroupId
-import net.dmitriyvolk.pizzaandtech.domain.meeting.{MeetingService, MeetingId, MeetingDetails}
 import net.dmitriyvolk.pizzaandtech.domain.meeting.events.RsvpDetails
+import net.dmitriyvolk.pizzaandtech.domain.meeting.{MeetingDetails, MeetingId, MeetingService}
 import net.dmitriyvolk.pizzaandtech.domain.user.UserId
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.web.bind.annotation.RequestMethod._
 import org.springframework.web.bind.annotation._
-import RequestMethod._
-import scala.concurrent.ExecutionContext.Implicits.global
 
-import WebImplicits._
+import scala.concurrent.ExecutionContext.Implicits.global
 
 @RestController
 @RequestMapping(Array("/meetings"))
@@ -29,20 +28,20 @@ class MeetingController @Autowired() (private val meetingService: MeetingService
 }
 
 @RestController
-@RequestMapping(Array("/{meetingId}/comment"))
+@RequestMapping(Array("/meetings/{meetingId}/comments"))
 class MeetingCommentsController @Autowired() (private val meetingService: MeetingService) {
 
   @RequestMapping(method=Array(POST))
-  def addComment(@PathVariable meetingId: String, @RequestBody commentDetails: CommentDetails) = {
+  def addComment(@PathVariable meetingId: String, @RequestBody newComment: CommentOnMeetingRequest) = {
     WebUtil.toDeferredResult(
-      meetingService.commentOnMeeting(MeetingId(meetingId), commentDetails)
+      meetingService.commentOnMeeting(MeetingId(meetingId), newComment.text)
         .map(group => UpdateMeetingResponse(group.entityId.id)))
   }
 
 }
 
 @RestController
-@RequestMapping(Array("/{meetingId}/rsvps"))
+@RequestMapping(Array("/meetings/{meetingId}/rsvps"))
 class MeetingRsvpController @Autowired() (private val meetingService: MeetingService) {
 
   @RequestMapping(method=Array(POST))
@@ -59,3 +58,5 @@ case class ScheduleMeetingRequest(groupId: String, meetingDetails: MeetingDetail
 case class ScheduleMeetingResponse(meetingId: String)
 
 case class UpdateMeetingResponse(meetingId: String)
+
+case class CommentOnMeetingRequest(text: String)

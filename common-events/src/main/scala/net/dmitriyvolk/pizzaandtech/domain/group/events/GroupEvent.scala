@@ -12,6 +12,7 @@ case class GroupDetailsUpdatedEvent(groupDetails: GroupDetails) extends GroupEve
 case class MemberJoinedEvent(memberId: EntityId) extends GroupEvent
 case class EventScheduledEvent(eventId: EntityId) extends GroupEvent
 case class CommentAddedEvent(comment: CommentDetails) extends GroupEvent
+case class CommentListForGroupUpdatedEvent(commentList: Seq[CommentDetails]) extends GroupEvent
 case class NewMeetingRecordedEvent(meetingDetails: MeetingDetails) extends GroupEvent
 case class MeetingListUpdatedEvent(meetingList: Seq[MeetingIdAndDetails]) extends GroupEvent
 case class UserListForGroupUpdatedEvent(users: Seq[UserIdAndBriefInfo]) extends GroupEvent

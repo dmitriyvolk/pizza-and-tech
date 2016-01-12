@@ -22,6 +22,10 @@
 			deleteMeeting: {
 			  method: 'DELETE',
 			  url: commandSideServiceUrl + '/meetings/:meetingId'
+			},
+			newComment: {
+			  method: 'POST',
+			  url: commandSideServiceUrl + '/meetings/:meetingId/comments'
 			}
 		});
 	}]);

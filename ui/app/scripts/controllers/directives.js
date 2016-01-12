@@ -20,7 +20,7 @@
 				comment: '='
 			},
 			template: [
-				'<p>{{comment.comment}}</p>',
+				'<p>{{comment.text}}</p>',
 				'<p><i><pat-user user="comment.author"></pat-user> on {{comment.timestamp | date}}</i></p>'
 			].join('')
 		};

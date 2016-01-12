@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
 import com.fasterxml.jackson.datatype.joda.JodaModule
 import net.dmitriyvolk.pizzaandtech.domain.EntityIdWrapper
+import net.dmitriyvolk.pizzaandtech.domain.comment.CommentDetails
 import net.dmitriyvolk.pizzaandtech.domain.group.{GroupIdAndDetails, GroupDetails, GroupId}
 import net.dmitriyvolk.pizzaandtech.domain.meeting.{MeetingDetails, MeetingId, MeetingIdAndDetails}
 import net.dmitriyvolk.pizzaandtech.domain.user.{UserIdAndBriefInfo, UserBriefInfo, UserId}
@@ -59,6 +60,12 @@ class JsonFileStateUpdater @Autowired() (
 
   override def createOrUpdateUser(userId: UserId, briefInfo: UserBriefInfo): Unit =
     write(userFolder(userId), "user.json", UserIdAndBriefInfo(userId, briefInfo))
+
+  override def updateCommentListForGroup(groupId: GroupId, commentList: Seq[CommentDetails]): Unit =
+    write(groupFolder(groupId), "comments.json", commentList)
+
+  override def updateCommentListForMeeting(meetingId: MeetingId, commentList: Seq[CommentDetails]): Unit =
+    write(meetingFolder(meetingId), "comments.json", commentList)
 }
 
 object JsonFileStateUpdater {
@@ -124,6 +131,20 @@ object PizzaAndTechModule extends SimpleModule {
       ))
 
     override def handledType(): Class[UserIdAndBriefInfo] = classOf[UserIdAndBriefInfo]
+  })
+
+  addSerializer(new JsonSerializer[CommentDetails] {
+    override def serialize(value: CommentDetails, gen: JsonGenerator, serializers: SerializerProvider): Unit =
+      gen.writeObject(Map(
+        ("author", Map(
+          ("id", value.userId),
+          ("name", value.userDisplayName)
+        )),
+        ("text", value.text),
+        ("timestamp", value.timestamp)
+      ))
+
+    override def handledType(): Class[CommentDetails] = classOf[CommentDetails]
   })
 
   class EntityIdWrapperSerializer[T <: EntityIdWrapper] extends JsonSerializer[T] {

@@ -17,6 +17,7 @@ case class Group(groupDetails: GroupDetails, comments: Seq[CommentDetails], meet
   def updateMeetingList(updatedMeeting: MeetingIdAndDetails) = meetings map { case MeetingIdAndDetails(updatedMeeting.id, _) => updatedMeeting; case x => x}
   def userJoins(userId: UserId, userInfo: UserBriefInfo) = users:+ UserIdAndBriefInfo(userId, userInfo)
   def userLeaves(userId: UserId) = users.filter(_.userId != userId)
+  def addComment(commentDetails: CommentDetails) = comments :+ commentDetails
 
   override def processCommand: PartialFunction[GroupCommand, Seq[Event]] = {
     case RegisterNewGroupCommand(UserIdAndBriefInfo(userId, userInfo), groupDetails) =>
@@ -24,7 +25,7 @@ case class Group(groupDetails: GroupDetails, comments: Seq[CommentDetails], meet
     case UpdateGroupDetailsCommand(groupDetails) =>
       Seq(GroupDetailsUpdatedEvent(groupDetails))
     case CommentOnGroupCommand(commentDetails) =>
-      Seq(CommentAddedEvent(commentDetails))
+      Seq(CommentAddedEvent(commentDetails), CommentListForGroupUpdatedEvent(addComment(commentDetails)))
     case RecordMeetingScheduledCommand(meetingId, meetingDetails) =>
       Seq(MeetingListUpdatedEvent(appendMeetingList(MeetingIdAndDetails(meetingId, meetingDetails))))
     case RecordMeetingDetailsUpdatedCommand(meetingId, meetingDetails) =>
@@ -38,7 +39,7 @@ case class Group(groupDetails: GroupDetails, comments: Seq[CommentDetails], meet
   override def applyEvent: PartialFunction[Event, Group] = {
     case GroupCreatedEvent(initialGroupDetails) => copy(groupDetails = initialGroupDetails)
     case GroupDetailsUpdatedEvent(updatedGroupDetails) => copy(groupDetails = updatedGroupDetails)
-    case CommentAddedEvent(commentDetails) => copy(comments = comments :+ commentDetails)
+    case CommentListForGroupUpdatedEvent(updatedCommentList) => copy(comments = updatedCommentList)
     case MeetingListUpdatedEvent(updatedMeetingList) => copy(meetings = updatedMeetingList)
     case _ => this
   }

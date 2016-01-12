@@ -24,7 +24,7 @@ class DomainConfiguration {
   def userEventHandlers(eventStore: EventStore) = new UserEventHandlers()(eventStore)
 
   @Bean
-  def meetingService(eventStore: EventStore) = new MeetingService()(eventStore)
+  def meetingService(authenticationService: AuthenticationService, eventStore: EventStore) = new MeetingService(authenticationService)(eventStore)
 
   @Bean
   def userService(eventStore: EventStore) = new UserService()(eventStore)

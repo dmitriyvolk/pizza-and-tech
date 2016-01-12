@@ -28,18 +28,18 @@ class GroupContoller @Autowired() (private val groupService: GroupService) {
 }
 
 @RestController
-@RequestMapping(Array("/{groupId}/comment"))
+@RequestMapping(Array("/groups/{groupId}/comments"))
 class GroupCommentsController @Autowired() (private val groupService: GroupService) {
 
   @RequestMapping(method=Array(POST))
-  def addComment(@PathVariable groupId: String, @RequestBody commentDetails: CommentDetails) = {
-    val f = groupService.commentOnGroup(GroupId(groupId), commentDetails)
+  def addComment(@PathVariable groupId: String, @RequestBody addCommentRequest: AddCommentRequest) = {
+    val f = groupService.commentOnGroup(GroupId(groupId), addCommentRequest.text)
     WebUtil.toDeferredResult(f map(group => UpdateGroupResponse(group.entityId.id)))
   }
 }
 
 @RestController
-@RequestMapping(Array("/{groupId}/members"))
+@RequestMapping(Array("/groups/{groupId}/members"))
 class GroupMembershipController @Autowired() (private val userService: UserService) {
 
   @RequestMapping(method=Array(POST))
@@ -61,4 +61,5 @@ case class CreateGroupRequest(name: String, description: String) {
 }
 case class CreateGroupResponse(groupId: String)
 case class UpdateGroupResponse(groupId: String)
+case class AddCommentRequest(text: String)
 
