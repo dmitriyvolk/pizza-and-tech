@@ -1,8 +1,8 @@
 package net.dmitriyvolk.pizzandtech.domain.event
 
 import net.chrisrichardson.eventstore.EntityId
-import net.dmitriyvolk.pizzaandtech.domain.meeting.{UserAndComment, Rsvps}
 import net.dmitriyvolk.pizzaandtech.domain.meeting.events._
+import net.dmitriyvolk.pizzaandtech.domain.user.UserMother
 import org.scalatest.{PropSpec, Matchers}
 import org.scalatest.matchers.{MatchResult, Matcher}
 import org.scalatest.prop.TableDrivenPropertyChecks
@@ -10,7 +10,8 @@ import org.scalatest.prop.TableDrivenPropertyChecks
 class RsvpSpec extends PropSpec with TableDrivenPropertyChecks with Matchers{
 
 
-  val user1 = EntityId.make("1")
+  val user1 = UserMother.scottTiger
+
   val comment1 = "Comment One"
 
   import CustomMatchers._
@@ -26,7 +27,7 @@ class RsvpSpec extends PropSpec with TableDrivenPropertyChecks with Matchers{
         case Maybe => Rsvps().respondMaybe(user1, comment1)
       }
 
-      rsvps should haveRsvpInExpectedBucket(expectedRsvp, user1)
+      rsvps should haveRsvpInExpectedBucket(expectedRsvp, user1.userId.entityId)
     }
 
 
@@ -40,7 +41,7 @@ class RsvpSpec extends PropSpec with TableDrivenPropertyChecks with Matchers{
         case Maybe => Rsvps().respondMaybe(user1, comment1)
       }
 
-      rsvps should notHaveRsvpInUnexpectedBucket(expectedRsvp, user1)
+      rsvps should notHaveRsvpInUnexpectedBucket(expectedRsvp, user1.userId.entityId)
 
     }
   }
@@ -51,7 +52,7 @@ class RsvpSpec extends PropSpec with TableDrivenPropertyChecks with Matchers{
 
     trait BucketMatchers extends Matcher[Rsvps] {
 
-      def containsUserId(bucket: Seq[UserAndComment], userId: EntityId) = bucket.map(_.userId).contains(userId)
+      def containsUserId(bucket: Seq[UserAndComment], userId: EntityId) = bucket.map(_.user).contains(userId)
     }
 
     class RsvpExistsInExpectedBucketMatcher(expectedRsvp: YesNoMaybe, userId: EntityId) extends BucketMatchers {

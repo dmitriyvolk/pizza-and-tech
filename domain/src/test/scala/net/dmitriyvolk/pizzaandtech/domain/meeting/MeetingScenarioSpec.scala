@@ -1,9 +1,9 @@
 package net.dmitriyvolk.pizzaandtech.domain.meeting
 
 import net.chrisrichardson.eventstore.EntityWithIdAndVersion
-import net.dmitriyvolk.pizzaandtech.domain.GroupMother
-import net.dmitriyvolk.pizzaandtech.domain.group.{Group, GroupId, GroupDetails}
+import net.dmitriyvolk.pizzaandtech.domain.group.{GroupMother, Group, GroupId, GroupDetails}
 import net.dmitriyvolk.pizzaandtech.domain.test.util.{MeetingDto, SpringContextForFeatureTests}
+import net.dmitriyvolk.pizzaandtech.domain.user.UserMother
 import org.scalactic.{Equality, Equivalence}
 import org.scalatest.{Matchers, GivenWhenThen, FeatureSpec}
 import org.scalatest.concurrent.Eventually._
@@ -28,12 +28,13 @@ class MeetingScenarioSpec extends FeatureSpec with GivenWhenThen with Matchers w
   import MeetingMother._
 
   feature("Scheduling and changing meetings") {
+    val groupOwner = UserMother("user-1", "Group", "Owner")
 
     scenario("new meeting is scheduled") {
 
       Given("a new group")
       val groupId = await {
-        groupService.createGroup(groupFixtureOne)
+        groupService.createGroup(groupFixtureOne, groupOwner)
       }
 
       When("scheduling new meeting")
@@ -60,7 +61,7 @@ class MeetingScenarioSpec extends FeatureSpec with GivenWhenThen with Matchers w
       Given("an existing meeting")
       val (groupId: EntityWithIdAndVersion[Group], meetingId: EntityWithIdAndVersion[Meeting]) = await {
         for {
-          groupId <- groupService.createGroup(makeGroupDetails("2"))
+          groupId <- groupService.createGroup(makeGroupDetails("2"), groupOwner)
           meetingId <- meetingService.scheduleMeeting(GroupId(groupId.entityId), makeMeetingDetails("2"))
         } yield (groupId, meetingId)
       }

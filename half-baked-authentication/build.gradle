@@ -1,0 +1,12 @@
+apply plugin: 'scala'
+
+dependencies {
+    compile "net.chrisrichardson.eventstore.client:eventstore-client-event-handling:$eventStoreClientVersion"
+    compile "net.chrisrichardson.eventstore.client:eventstore-http-stomp-client:$eventStoreClientVersion"
+    compile "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
+    compile("org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion")
+    runtime("org.hsqldb:hsqldb:2.3.3")
+    compile project(":domain")
+    testCompile "net.chrisrichardson.eventstore.client:eventstore-jdbc:$eventStoreClientVersion"
+    testCompile "org.scalatest:scalatest_2.10:2.2.4"
+}

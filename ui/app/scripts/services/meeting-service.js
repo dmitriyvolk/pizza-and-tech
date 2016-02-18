@@ -2,7 +2,7 @@
 
 (function() {
 	angular.module('patUI')
-	.factory('Meeting', ['$resource', 'patConfig', function($resource, patConfig) {
+	.factory('Meeting', ['$resource', 'patConfig', 'Authentication', function($resource, patConfig, Authentication) {
 	  var dataRoot = patConfig.dataRoot;
 	  var commandSideServiceUrl = patConfig.commandSideServiceUrl;
 		return $resource(dataRoot + '/meetings/:meetingId/meeting.json', {}, {
@@ -17,7 +17,10 @@
 			},
 			newMeeting: {
 			  method: 'POST',
-			  url: commandSideServiceUrl + '/meetings/'
+			  url: commandSideServiceUrl + '/meetings/',
+        headers: {
+          'X-PIZZAANDTECH-USERID': Authentication.getCurrentUserId()
+        }
 			},
 			deleteMeeting: {
 			  method: 'DELETE',
@@ -25,7 +28,10 @@
 			},
 			newComment: {
 			  method: 'POST',
-			  url: commandSideServiceUrl + '/meetings/:meetingId/comments'
+			  url: commandSideServiceUrl + '/meetings/:meetingId/comments',
+        headers: {
+          'X-PIZZAANDTECH-USERID': Authentication.getCurrentUserId()
+        }
 			}
 		});
 	}]);

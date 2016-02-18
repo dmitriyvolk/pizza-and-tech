@@ -5,6 +5,7 @@ import net.dmitriyvolk.pizzaandtech.domain.configuration.DomainConfiguration
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.web.HttpMessageConverters
 import org.springframework.context.annotation.{Import, Bean, ComponentScan, Configuration}
+import org.springframework.core.annotation.Order
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.web.servlet.config.annotation.{CorsRegistry, WebMvcConfigurerAdapter, WebMvcConfigurer}
 
@@ -21,12 +22,16 @@ class CommandSideConfiguration {
     new HttpMessageConverters(additional)
   }
 
-  @Bean
-  def corsConfigurer: WebMvcConfigurer = {
-    new WebMvcConfigurerAdapter {
-      override def addCorsMappings(registry: CorsRegistry): Unit =
-        registry.addMapping("/**").allowedOrigins("http://localhost:9000", "http://pizza-and-tech-test.s3-website-us-east-1.amazonaws.com", "http://pizza-and-tech.s3-website-us-east-1.amazonaws.com/")
-    }
-  }
+//  @Bean
+//  def corsConfigurer: WebMvcConfigurer = {
+//    println("loading corsConfigurer")
+//    new WebMvcConfigurerAdapter {
+//      override def addCorsMappings(registry: CorsRegistry): Unit =
+//        registry
+//          .addMapping("/**")
+//            .allowedOrigins("http://localhost:9000", "http://pizza-and-tech-test.s3-website-us-east-1.amazonaws.com", "http://pizza-and-tech.s3-website-us-east-1.amazonaws.com/")
+//            .allowedMethods("GET", "HEAD", "POST", "PUT", "OPTIONS")
+//    }
+//  }
 
 }

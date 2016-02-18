@@ -1,21 +1,23 @@
 package net.dmitriyvolk.pizzaandtech.commandside.web
 
+import java.security.Principal
+
 import net.dmitriyvolk.pizzaandtech.commandside.web.WebImplicits._
-import net.dmitriyvolk.pizzaandtech.domain.comment.CommentDetails
 import net.dmitriyvolk.pizzaandtech.domain.group.{GroupDetails, GroupId, GroupService}
 import net.dmitriyvolk.pizzaandtech.domain.user.{UserService, UserId}
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.web.bind.annotation.RequestMethod._
 import org.springframework.web.bind.annotation._
 import scala.concurrent.ExecutionContext.Implicits.global
 
 @RestController
 @RequestMapping(Array("/groups"))
-class GroupContoller @Autowired() (private val groupService: GroupService) {
+class GroupContoller @Autowired() (private val groupService: GroupService, implicit val userDetailsService: UserDetailsService) {
 
   @RequestMapping(method=Array(POST))
-  def createGroup(@RequestBody createGroupRequest: CreateGroupRequest) = {
-    val future = groupService.createGroup(createGroupRequest.makeGroupDetails)
+  def createGroup(@RequestBody createGroupRequest: CreateGroupRequest, principal: Principal) = {
+    val future = groupService.createGroup(createGroupRequest.makeGroupDetails, WebImplicits.principalToUserIdAndBriefInfo(principal))
     WebUtil.toDeferredResult(future map (createdGroup => CreateGroupResponse(createdGroup.entityId.id)))
   }
 
@@ -29,11 +31,11 @@ class GroupContoller @Autowired() (private val groupService: GroupService) {
 
 @RestController
 @RequestMapping(Array("/groups/{groupId}/comments"))
-class GroupCommentsController @Autowired() (private val groupService: GroupService) {
+class GroupCommentsController @Autowired() (private val groupService: GroupService, implicit val userDetailsService: UserDetailsService) {
 
   @RequestMapping(method=Array(POST))
-  def addComment(@PathVariable groupId: String, @RequestBody addCommentRequest: AddCommentRequest) = {
-    val f = groupService.commentOnGroup(GroupId(groupId), addCommentRequest.text)
+  def addComment(@PathVariable groupId: String, @RequestBody addCommentRequest: AddCommentRequest, principal: Principal) = {
+    val f = groupService.commentOnGroup(GroupId(groupId), WebImplicits.principalToUserIdAndBriefInfo(principal), addCommentRequest.text)
     WebUtil.toDeferredResult(f map(group => UpdateGroupResponse(group.entityId.id)))
   }
 }

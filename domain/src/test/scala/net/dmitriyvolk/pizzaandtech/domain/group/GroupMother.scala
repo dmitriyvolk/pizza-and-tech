@@ -1,6 +1,4 @@
-package net.dmitriyvolk.pizzaandtech.domain
-
-import net.dmitriyvolk.pizzaandtech.domain.group.GroupDetails
+package net.dmitriyvolk.pizzaandtech.domain.group
 
 object GroupMother {
 

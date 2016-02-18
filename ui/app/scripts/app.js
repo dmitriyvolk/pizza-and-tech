@@ -60,6 +60,11 @@
         templateUrl: 'views/profile.html',
         controller: 'ProfileCtrl'
       })
+      .when('/login', {
+        templateUrl: 'views/login.html',
+        controller: 'LoginCtrl',
+        controllerAs: 'controller'
+      })
       .otherwise({
         redirectTo: '/'
       });

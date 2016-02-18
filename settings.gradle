@@ -4,5 +4,6 @@ include 'command-side-service'
 include 'json-generator'
 include 's3-data-writer'
 include 'end-to-end'
+include 'half-baked-authentication'
 
 rootProject.name = 'pizzaandtech'

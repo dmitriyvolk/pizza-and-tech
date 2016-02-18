@@ -2,10 +2,13 @@ package net.dmitriyvolk.pizzaandtech.generator
 
 import net.dmitriyvolk.pizzaandtech.domain.comment.CommentDetails
 import net.dmitriyvolk.pizzaandtech.domain.group.{GroupIdAndDetails, GroupId, GroupDetails}
+import net.dmitriyvolk.pizzaandtech.domain.meeting.events.Rsvps
 import net.dmitriyvolk.pizzaandtech.domain.meeting.{MeetingId, MeetingIdAndDetails, MeetingDetails}
 import net.dmitriyvolk.pizzaandtech.domain.user.{UserIdAndBriefInfo, UserBriefInfo, UserId}
 
 trait StateUpdater {
+  def updateRsvps(meetingId: MeetingId, rsvps: Rsvps)
+
   def updateCommentListForMeeting(meetingId: MeetingId, commentList: Seq[CommentDetails])
 
   def updateCommentListForGroup(groupId: GroupId, commentList: Seq[CommentDetails])

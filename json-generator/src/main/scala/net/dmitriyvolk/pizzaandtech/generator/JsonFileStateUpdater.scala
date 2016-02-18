@@ -9,6 +9,7 @@ import com.fasterxml.jackson.datatype.joda.JodaModule
 import net.dmitriyvolk.pizzaandtech.domain.EntityIdWrapper
 import net.dmitriyvolk.pizzaandtech.domain.comment.CommentDetails
 import net.dmitriyvolk.pizzaandtech.domain.group.{GroupIdAndDetails, GroupDetails, GroupId}
+import net.dmitriyvolk.pizzaandtech.domain.meeting.events.Rsvps
 import net.dmitriyvolk.pizzaandtech.domain.meeting.{MeetingDetails, MeetingId, MeetingIdAndDetails}
 import net.dmitriyvolk.pizzaandtech.domain.user.{UserIdAndBriefInfo, UserBriefInfo, UserId}
 import net.dmitriyvolk.pizzaandtech.generator.DataWriter.DataPath
@@ -66,6 +67,9 @@ class JsonFileStateUpdater @Autowired() (
 
   override def updateCommentListForMeeting(meetingId: MeetingId, commentList: Seq[CommentDetails]): Unit =
     write(meetingFolder(meetingId), "comments.json", commentList)
+
+  override def updateRsvps(meetingId: MeetingId, rsvps: Rsvps): Unit =
+    write(meetingFolder(meetingId), "rsvp.json", rsvps)
 }
 
 object JsonFileStateUpdater {

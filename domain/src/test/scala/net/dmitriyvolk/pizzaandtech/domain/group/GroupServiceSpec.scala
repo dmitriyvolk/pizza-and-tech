@@ -4,6 +4,7 @@ import net.chrisrichardson.eventstore.EntityWithIdAndVersion
 import net.chrisrichardson.eventstore.jdbc.config.JdbcEventStoreConfiguration
 import net.dmitriyvolk.pizzaandtech.domain.configuration.DomainConfiguration
 import net.dmitriyvolk.pizzaandtech.domain.test.util.GroupStateHolder
+import net.dmitriyvolk.pizzaandtech.domain.user.UserMother
 import org.scalatest.concurrent.Eventually._
 import org.scalatest.time.{Millis, Span}
 import org.scalatest.{GivenWhenThen, Matchers, WordSpec}
@@ -23,13 +24,14 @@ class GroupServiceSpec extends WordSpec with Matchers with GivenWhenThen {
 
     val groupService = ctx.getBean(classOf[GroupService])
     val groupHolder = ctx.getBean(classOf[GroupStateHolder])
+    val groupOwner = UserMother("user-1", "First", "User")
 
     def group(id: EntityWithIdAndVersion[Group]) = groupHolder.entities(id.entityId)
 
     "create group" in {
 
       val groupId = await {
-        groupService.createGroup(GroupDetails("group", "description"))
+        groupService.createGroup(GroupDetails("group", "description"), groupOwner)
       }
       eventually {
         group(groupId) should have(
@@ -41,7 +43,7 @@ class GroupServiceSpec extends WordSpec with Matchers with GivenWhenThen {
 
     "update group details" in {
       val groupId = await {
-        groupService.createGroup(GroupDetails("group", "description"))
+        groupService.createGroup(GroupDetails("group", "description"), groupOwner)
       }
       await {
         groupService.updateGroupInfo(GroupId(groupId.entityId), GroupDetails("group_upd", "description_upd"))

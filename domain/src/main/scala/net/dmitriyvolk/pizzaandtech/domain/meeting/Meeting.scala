@@ -21,11 +21,11 @@ case class Meeting(groupId: GroupId, meetingDetails: MeetingDetails, rsvps: Rsvp
     case ScheduleMeetingCommand(groupId, meetingDetails) => Seq(MeetingScheduledEvent(groupId, meetingDetails))
     case UpdateMeetingDetailsCommand(meetingDetails) => Seq(MeetingDetailsUpdatedEvent(groupId, meetingDetails))
     case CommentOnMeetingCommand(commentDetails) => Seq(CommentAddedToMeetingEvent(commentDetails), CommentListForMeetingUpdatedEvent(addComment(commentDetails)))
-    case RsvpToMeetingCommand(rsvpDetails, userId) =>
+    case RsvpToMeetingCommand(user, rsvpDetails) =>
       rsvpDetails.going match {
-        case Yes => Seq(MemberIsComingToMeeting(userId, rsvpDetails.comment))
-        case No => Seq(MemberRefusedToComeToMeeting(userId, rsvpDetails.comment))
-        case Maybe => Seq(MemberWillDecideLaterWhetherToComeToMeeting(userId, rsvpDetails.comment))
+        case Yes => Seq(MemberIsComingToMeeting(user, rsvpDetails.comment), RsvpsForMeetingUpdatedEvent(rsvps.respondYes(user, rsvpDetails.comment)))
+        case No => Seq(MemberRefusedToComeToMeeting(user, rsvpDetails.comment), RsvpsForMeetingUpdatedEvent(rsvps.respondNo(user, rsvpDetails.comment)))
+        case Maybe => Seq(MemberWillDecideLaterWhetherToComeToMeeting(user, rsvpDetails.comment), RsvpsForMeetingUpdatedEvent(rsvps.respondMaybe(user, rsvpDetails.comment)))
       }
   }
 
@@ -33,28 +33,8 @@ case class Meeting(groupId: GroupId, meetingDetails: MeetingDetails, rsvps: Rsvp
     case MeetingScheduledEvent(parentGroupId, initialMeetingDetails) => copy(groupId = parentGroupId, meetingDetails = initialMeetingDetails, rsvps = new Rsvps(Seq(), Seq(), Seq()), Seq())
     case MeetingDetailsUpdatedEvent(groupId, updatedMeetingDetails) => copy(meetingDetails = updatedMeetingDetails)
     case CommentListForMeetingUpdatedEvent(updatedCommentList) => copy(comments = updatedCommentList)
-    case MemberIsComingToMeeting(userId, comment) => copy(rsvps = rsvps.respondYes(userId, comment))
-    case MemberRefusedToComeToMeeting(userId, comment) => copy(rsvps = rsvps.respondNo(userId, comment))
-    case MemberWillDecideLaterWhetherToComeToMeeting(userId, comment) => copy(rsvps = rsvps.respondMaybe(userId, comment))
+    case RsvpsForMeetingUpdatedEvent(updatedRsvps: Rsvps) => copy(rsvps = updatedRsvps)
     case _ => this
   }
 }
 
-case class UserAndComment(userId: EntityId, comment: String)
-case class Rsvps(yes: Seq[UserAndComment], no: Seq[UserAndComment], maybe: Seq[UserAndComment]) {
-
-  def respondYes(userId: EntityId, comment: String): Rsvps = copy(yes = yes :+ UserAndComment(userId, comment))
-  def respondNo(userId: EntityId, comment: String): Rsvps = copy(no = no :+ UserAndComment(userId, comment))
-  def respondMaybe(userId: EntityId, comment: String): Rsvps = copy(maybe = maybe :+ UserAndComment(userId, comment))
-
-  def containsRsvpOf(userId: EntityId): Boolean = {
-    def containsUserId(seq: Seq[UserAndComment], userId: EntityId) = seq.exists(_.userId == userId)
-    List(yes, no, maybe).foldLeft(false)((previous, s) => previous || containsUserId(s, userId))
-  }
-
-}
-object Rsvps {
-  def apply() = {
-    new Rsvps(Seq(), Seq(), Seq())
-  }
-}

@@ -1,6 +1,11 @@
 package net.dmitriyvolk.pizzaandtech.commandside.web
 
+import java.security.Principal
+
 import net.chrisrichardson.eventstore.EntityId
+import net.dmitriyvolk.pizzaandtech.authentication.halfbaked.configuration.{AuthImplicits, CustomUserDetails}
+import net.dmitriyvolk.pizzaandtech.domain.user.UserIdAndBriefInfo
+import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.web.context.request.async.DeferredResult
 
 import scala.concurrent.Future
@@ -24,5 +29,8 @@ object WebUtil {
 
 object WebImplicits {
   implicit def stringToEntityId(id: String): EntityId = EntityId(id)
+
+  implicit def principalToUserIdAndBriefInfo(principal: Principal)(implicit userDetailsService: UserDetailsService): UserIdAndBriefInfo =
+    AuthImplicits.toUserIdAndBriefInfo(userDetailsService.loadUserByUsername(principal.getName).asInstanceOf[CustomUserDetails])
 }
 
