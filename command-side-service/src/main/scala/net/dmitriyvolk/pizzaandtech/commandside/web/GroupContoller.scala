@@ -1,24 +1,26 @@
 package net.dmitriyvolk.pizzaandtech.commandside.web
 
-import java.security.Principal
-
-import net.dmitriyvolk.pizzaandtech.commandside.web.WebImplicits._
+import net.dmitriyvolk.pizzaandtech.domain.common.{UserIdHolder, UserInfoResolver}
 import net.dmitriyvolk.pizzaandtech.domain.group.{GroupDetails, GroupId, GroupService}
-import net.dmitriyvolk.pizzaandtech.domain.user.{UserService, UserId}
+import net.dmitriyvolk.pizzaandtech.domain.user.{UserId, UserService}
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.web.bind.annotation.RequestMethod._
 import org.springframework.web.bind.annotation._
+import net.dmitriyvolk.pizzaandtech.domain.Implicits._
 import scala.concurrent.ExecutionContext.Implicits.global
 
 @RestController
 @RequestMapping(Array("/groups"))
-class GroupContoller @Autowired() (private val groupService: GroupService, implicit val userDetailsService: UserDetailsService) {
+class GroupContoller @Autowired() (val groupService: GroupService, val userIdHolder: UserIdHolder, val userInfoResolver: UserInfoResolver) extends ResolvingCurrentUser {
 
   @RequestMapping(method=Array(POST))
-  def createGroup(@RequestBody createGroupRequest: CreateGroupRequest, principal: Principal) = {
-    val future = groupService.createGroup(createGroupRequest.makeGroupDetails, WebImplicits.principalToUserIdAndBriefInfo(principal))
-    WebUtil.toDeferredResult(future map (createdGroup => CreateGroupResponse(createdGroup.entityId.id)))
+  def createGroup(@RequestBody createGroupRequest: CreateGroupRequest) = {
+
+    WebUtil.toDeferredResult {
+      withCurrentUser {
+        groupService.createGroup(createGroupRequest.makeGroupDetails, _) map (createdGroup => CreateGroupResponse(createdGroup.entityId.id))
+      }
+    }
   }
 
   @RequestMapping(value=Array("/{groupId}"), method = Array(PUT))
@@ -31,12 +33,15 @@ class GroupContoller @Autowired() (private val groupService: GroupService, impli
 
 @RestController
 @RequestMapping(Array("/groups/{groupId}/comments"))
-class GroupCommentsController @Autowired() (private val groupService: GroupService, implicit val userDetailsService: UserDetailsService) {
+class GroupCommentsController @Autowired() (private val groupService: GroupService, val userIdHolder: UserIdHolder, val userInfoResolver: UserInfoResolver) extends ResolvingCurrentUser{
 
   @RequestMapping(method=Array(POST))
-  def addComment(@PathVariable groupId: String, @RequestBody addCommentRequest: AddCommentRequest, principal: Principal) = {
-    val f = groupService.commentOnGroup(GroupId(groupId), WebImplicits.principalToUserIdAndBriefInfo(principal), addCommentRequest.text)
-    WebUtil.toDeferredResult(f map(group => UpdateGroupResponse(group.entityId.id)))
+  def addComment(@PathVariable groupId: String, @RequestBody addCommentRequest: AddCommentRequest) = {
+    WebUtil.toDeferredResult{
+      withCurrentUser {
+        groupService.commentOnGroup(GroupId(groupId), addCommentRequest.text)(_) map(group => UpdateGroupResponse(group.entityId.id))
+      }
+    }
   }
 }
 

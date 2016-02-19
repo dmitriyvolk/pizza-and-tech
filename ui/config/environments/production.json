@@ -1,5 +1,6 @@
 {
   "environment": "Prod",
   "dataRoot": "http://pizza-and-tech-test-data.s3-website-us-east-1.amazonaws.com",
-  "commandSideServiceUrl": "http://localhost:8080"
+  "commandSideServiceUrl": "http://localhost:8080",
+  "authenticationServiceUrl": "http://localhost:8080"
 }

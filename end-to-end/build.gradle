@@ -5,4 +5,7 @@ dependencies {
     compile project(":s3-data-writer")
     compile project(":command-side-service")
     compile project(":half-baked-authentication")
+
+    testCompile "org.scalatest:scalatest_2.10:2.2.4"
+    testCompile "net.chrisrichardson.eventstore.client:eventstore-jdbc:$eventStoreClientVersion"
 }

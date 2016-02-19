@@ -1,7 +1,8 @@
-package net.dmitriyvolk.pizzaandtech.generator
+package net.dmitriyvolk.pizzaandtech.test.generator
 
 import net.dmitriyvolk.pizzaandtech.generator.eventhandlers.GroupEventHandlerService
-import org.scalatest.{GivenWhenThen, Matchers, FeatureSpec}
+import net.dmitriyvolk.pizzaandtech.generator.{FilesystemDataWriter, JacksonJsonSerializer, JsonFileStateUpdater}
+import org.scalatest.{FeatureSpec, GivenWhenThen, Matchers}
 
 class JsonFileStateUpdaterSpec extends FeatureSpec with Matchers with GivenWhenThen {
 

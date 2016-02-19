@@ -1,9 +1,10 @@
-package net.dmitriyvolk.pizzaandtech.generator.configuration
+package net.dmitriyvolk.pizzaandtech.test.generator.configuration
 
 import java.io.File
 
-import net.dmitriyvolk.pizzaandtech.commandside.configuration.CommandSideServiceTestConfiguration
+import net.dmitriyvolk.pizzaandtech.generator.configuration.JsonGeneratorConfiguration
 import net.dmitriyvolk.pizzaandtech.generator.{DataWriter, FilesystemDataWriter}
+import net.dmitriyvolk.pizzaandtech.test.commandside.configuration.CommandSideServiceTestConfiguration
 import org.springframework.boot.SpringApplication
 import org.springframework.context.annotation.{Bean, Configuration, Import}
 

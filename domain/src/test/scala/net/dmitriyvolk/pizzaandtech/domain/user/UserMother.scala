@@ -9,7 +9,7 @@ object UserMother {
 
   def apply(userId: String): UserIdAndBriefInfo = apply(userId, s"user-$userId", s"User $userId")
 
-  def apply(userId: String, firstName: String, lastName: String) = UserIdAndBriefInfo(UserId(EntityId(userId)), UserBriefInfo(s"$firstName.$lastName", s"$firstName $lastName", s"pass$firstName$lastName"))
+  def apply(userId: String, firstName: String, lastName: String) = UserIdAndBriefInfo(UserId(EntityId(userId)), UserBriefInfo(s"$firstName.$lastName", s"$firstName $lastName"))
 
   val scottTiger = UserMother("1", "Scott", "Tiger")
 }

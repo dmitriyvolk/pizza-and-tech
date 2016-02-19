@@ -69,5 +69,15 @@
         redirectTo: '/'
       });
   })
+  .config(function($httpProvider) {
+    $httpProvider.interceptors.push(function($q, $rootScope) {
+      return {
+        'request': function(config) {
+          config.headers['X-PIZZAANDTECH-USERID'] = $rootScope.userId;
+          return config;
+        }
+      };
+    });
+  })
 ;
 })();

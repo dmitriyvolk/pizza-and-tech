@@ -1,6 +1,7 @@
 package net.dmitriyvolk.pizzaandtech.commandside.configuration
 
 import net.chrisrichardson.eventstore.json.EventStoreCommonObjectMapping
+import net.dmitriyvolk.pizzaandtech.domain.common.{PizzaAndTechCommonModule, ThreadLocalUserIdHolder, UserIdHolder}
 import net.dmitriyvolk.pizzaandtech.domain.configuration.DomainConfiguration
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.web.HttpMessageConverters
@@ -10,7 +11,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.servlet.config.annotation.{CorsRegistry, WebMvcConfigurerAdapter, WebMvcConfigurer}
 
 @Configuration
-@EnableAutoConfiguration
+//@EnableAutoConfiguration
 @Import(Array(classOf[DomainConfiguration]))
 @ComponentScan(basePackages = Array("net.dmitriyvolk.pizzaandtech.commandside.web"))
 class CommandSideConfiguration {
@@ -18,20 +19,24 @@ class CommandSideConfiguration {
   @Bean
   def scalaJsonConverter: HttpMessageConverters = {
     val additional  = new MappingJackson2HttpMessageConverter
-    additional.setObjectMapper(EventStoreCommonObjectMapping.getObjectMapper)
+    val mapper = EventStoreCommonObjectMapping.getObjectMapper
+    mapper.registerModule(PizzaAndTechCommonModule)
+    additional.setObjectMapper(mapper)
     new HttpMessageConverters(additional)
   }
 
-//  @Bean
-//  def corsConfigurer: WebMvcConfigurer = {
-//    println("loading corsConfigurer")
-//    new WebMvcConfigurerAdapter {
-//      override def addCorsMappings(registry: CorsRegistry): Unit =
-//        registry
-//          .addMapping("/**")
-//            .allowedOrigins("http://localhost:9000", "http://pizza-and-tech-test.s3-website-us-east-1.amazonaws.com", "http://pizza-and-tech.s3-website-us-east-1.amazonaws.com/")
-//            .allowedMethods("GET", "HEAD", "POST", "PUT", "OPTIONS")
-//    }
-//  }
+  @Bean
+  def corsConfigurer: WebMvcConfigurer = {
+    println("loading corsConfigurer")
+    new WebMvcConfigurerAdapter {
+      override def addCorsMappings(registry: CorsRegistry): Unit =
+        registry
+          .addMapping("/**")
+            .allowedOrigins("http://localhost:9000", "http://pizza-and-tech-test.s3-website-us-east-1.amazonaws.com", "http://pizza-and-tech.s3-website-us-east-1.amazonaws.com/")
+    }
+  }
+
+  @Bean
+  def userIdHolder: UserIdHolder = new ThreadLocalUserIdHolder()
 
 }

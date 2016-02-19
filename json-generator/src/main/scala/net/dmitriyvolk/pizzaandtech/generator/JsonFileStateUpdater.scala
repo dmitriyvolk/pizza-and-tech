@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
 import com.fasterxml.jackson.datatype.joda.JodaModule
 import net.dmitriyvolk.pizzaandtech.domain.EntityIdWrapper
 import net.dmitriyvolk.pizzaandtech.domain.comment.CommentDetails
+import net.dmitriyvolk.pizzaandtech.domain.common.PizzaAndTechCommonModule
 import net.dmitriyvolk.pizzaandtech.domain.group.{GroupIdAndDetails, GroupDetails, GroupId}
 import net.dmitriyvolk.pizzaandtech.domain.meeting.events.Rsvps
 import net.dmitriyvolk.pizzaandtech.domain.meeting.{MeetingDetails, MeetingId, MeetingIdAndDetails}
@@ -83,34 +84,9 @@ import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
 
 case class MeetingDetailsAndGroupId(groupId: GroupId, meetingDetails: MeetingDetails)
 
-object PizzaAndTechModule extends SimpleModule {
+object PizzaAndTechJsonGeneratorModule extends SimpleModule {
 
-  addSerializer(classOf[MeetingId], new EntityIdWrapperSerializer[MeetingId])
-  addSerializer(classOf[GroupId], new EntityIdWrapperSerializer[GroupId])
-  addSerializer(classOf[UserId], new EntityIdWrapperSerializer[UserId])
 
-  addSerializer(new JsonSerializer[GroupIdAndDetails] {
-    override def serialize(value: GroupIdAndDetails, gen: JsonGenerator, serializers: SerializerProvider): Unit =
-      gen.writeObject(Map(
-        ("id", value.groupId),
-        ("name", value.groupDetails.name)
-      ))
-
-    override def handledType(): Class[GroupIdAndDetails] = classOf[GroupIdAndDetails]
-  })
-
-  addSerializer(new JsonSerializer[MeetingIdAndDetails]() {
-    override def serialize(value: MeetingIdAndDetails, gen: JsonGenerator, serializers: SerializerProvider): Unit = {
-      gen.writeObject(Map(
-        ("id", value.id),
-        ("name", value.meetingDetails.name),
-        ("description", value.meetingDetails.description),
-        ("startDate", value.meetingDetails.startDate)
-      ))
-    }
-
-    override def handledType(): Class[MeetingIdAndDetails] = classOf[MeetingIdAndDetails]
-  })
 
   addSerializer(new JsonSerializer[MeetingDetailsAndGroupId] {
 
@@ -126,34 +102,7 @@ object PizzaAndTechModule extends SimpleModule {
     }
   })
 
-  addSerializer(new JsonSerializer[UserIdAndBriefInfo] {
-    override def serialize(value: UserIdAndBriefInfo, gen: JsonGenerator, serializers: SerializerProvider): Unit =
-      gen.writeObject(Map(
-        ("id", value.userId),
-        ("name", value.briefInfo.fullName),
-        ("username", value.briefInfo.username)
-      ))
 
-    override def handledType(): Class[UserIdAndBriefInfo] = classOf[UserIdAndBriefInfo]
-  })
-
-  addSerializer(new JsonSerializer[CommentDetails] {
-    override def serialize(value: CommentDetails, gen: JsonGenerator, serializers: SerializerProvider): Unit =
-      gen.writeObject(Map(
-        ("author", Map(
-          ("id", value.userId),
-          ("name", value.userDisplayName)
-        )),
-        ("text", value.text),
-        ("timestamp", value.timestamp)
-      ))
-
-    override def handledType(): Class[CommentDetails] = classOf[CommentDetails]
-  })
-
-  class EntityIdWrapperSerializer[T <: EntityIdWrapper] extends JsonSerializer[T] {
-    override def serialize(value: T, gen: JsonGenerator, serializers: SerializerProvider): Unit = gen.writeObject(value.entityId.id)
-  }
 }
 
 trait PizzaAndTechJsonSerializer {
@@ -166,7 +115,8 @@ class JacksonJsonSerializer extends PizzaAndTechJsonSerializer {
   val mapper = new ObjectMapper() with ScalaObjectMapper
   mapper.registerModule(DefaultScalaModule)
   mapper.registerModule(new JodaModule)
-  mapper.registerModule(PizzaAndTechModule)
+  mapper.registerModule(PizzaAndTechCommonModule)
+  mapper.registerModule(PizzaAndTechJsonGeneratorModule)
   mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 
   def toJson(dataObject: AnyRef) = mapper.writeValueAsString(dataObject)

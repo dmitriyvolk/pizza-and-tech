@@ -1,5 +1,6 @@
 {
   "environment": "Dev",
   "dataRoot": "localdata",
-  "commandSideServiceUrl": "http://localhost:8080"
+  "commandSideServiceUrl": "http://localhost:8080",
+  "authenticationServiceUrl": "http://localhost:8080"
 }

@@ -4,6 +4,7 @@ angular.module('patUI.config', [])
   .constant('patConfig', {
     environment: '@@environment',
     dataRoot: '@@dataRoot',
-    commandSideServiceUrl: '@@commandSideServiceUrl'
+    commandSideServiceUrl: '@@commandSideServiceUrl',
+    authenticationServiceUrl: '@@authenticationServiceUrl'
   });
 })();

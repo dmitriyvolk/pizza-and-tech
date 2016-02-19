@@ -47,6 +47,23 @@
 			},
 			templateUrl: 'views/directives/comments.html'
 		};
+	})
+	.directive('userSelect', function() {
+	  return {
+	    restrict: 'E',
+	    scope: {},
+	    template: [
+	      '<select ng-model="currentUser.id">',
+	      '  <option ng-repeat="user in users" value="{{user.id}}">{{user.name}}</option>',
+	      '</select>'
+      ].join(''),
+	    controller: function($scope, $rootScope, User) {
+	      $scope.users = User.list();
+	      $scope.selectUser = function(user) {
+	        $rootScope.currentUser = user;
+	      };
+	    }
+	  };
 	});
 
 })();

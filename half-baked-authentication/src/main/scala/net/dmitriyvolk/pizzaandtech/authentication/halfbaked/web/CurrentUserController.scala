@@ -1,18 +1,19 @@
 package net.dmitriyvolk.pizzaandtech.authentication.halfbaked.web
 
 
-import java.security.Principal
-
-import net.dmitriyvolk.pizzaandtech.authentication.halfbaked.configuration.CustomUserDetails
+import net.dmitriyvolk.pizzaandtech.authentication.halfbaked.configuration.InMemoryUserMap
+import net.dmitriyvolk.pizzaandtech.domain.user.UserIdAndBriefInfo
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.security.core.userdetails.UserDetailsService
-import org.springframework.security.provisioning.UserDetailsManager
-import org.springframework.web.bind.annotation.{RequestMapping, RestController}
+import org.springframework.web.bind.annotation.{RequestMethod, RequestMapping, RestController}
+
 
 @RestController
-class CurrentUserController @Autowired() (userDetailsService: UserDetailsService) {
+@RequestMapping(Array("/users"))
+class UsersController @Autowired() (userDetailsService: InMemoryUserMap) {
 
-  @RequestMapping(Array("/currentuser"))
-  def currentUser(principal: Principal): CustomUserDetails = userDetailsService.loadUserByUsername(principal.getName).asInstanceOf[CustomUserDetails]
+  @RequestMapping(method = Array(RequestMethod.GET))
+  def allUsers(): Seq[UserIdAndBriefInfo] = {
+    userDetailsService.getAllUsers
+  }
 
 }

@@ -1,15 +1,11 @@
 package net.dmitriyvolk.pizzaandtech.commandside.web
 
-import java.security.Principal
-
-import net.chrisrichardson.eventstore.EntityId
-import net.dmitriyvolk.pizzaandtech.authentication.halfbaked.configuration.{AuthImplicits, CustomUserDetails}
+import net.dmitriyvolk.pizzaandtech.domain.common.{UserIdHolder, UserInfoResolver}
 import net.dmitriyvolk.pizzaandtech.domain.user.UserIdAndBriefInfo
-import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.web.context.request.async.DeferredResult
 
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.{Future, Promise}
 
 /**
   * stolen from here: https://github.com/cer/event-sourcing-examples/blob/master/scala-spring/common-web/src/main/scala/net/chrisrichardson/eventstore/examples/bank/web/util/WebUtil.scala
@@ -27,10 +23,19 @@ object WebUtil {
   }
 }
 
-object WebImplicits {
-  implicit def stringToEntityId(id: String): EntityId = EntityId(id)
+trait ResolvingCurrentUser {
+  val userInfoResolver: UserInfoResolver
+  val userIdHolder: UserIdHolder
 
-  implicit def principalToUserIdAndBriefInfo(principal: Principal)(implicit userDetailsService: UserDetailsService): UserIdAndBriefInfo =
-    AuthImplicits.toUserIdAndBriefInfo(userDetailsService.loadUserByUsername(principal.getName).asInstanceOf[CustomUserDetails])
+  def getCurrentUser: Option[UserIdAndBriefInfo] = {
+    userInfoResolver.resolveUserId(userIdHolder.get)
+  }
+
+  def withCurrentUser[T](f: UserIdAndBriefInfo => Future[T]) = getCurrentUser match {
+    case Some(userInfo) => {
+      f(userInfo)
+    }
+    case None => Promise[T]().failure(new RuntimeException("UserNotFound")).future
+  }
+
 }
-
