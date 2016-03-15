@@ -33,6 +33,7 @@ trait ResolvingCurrentUser {
 
   def withCurrentUser[T](f: UserIdAndBriefInfo => Future[T]) = getCurrentUser match {
     case Some(userInfo) => {
+      println(s"Will call f with $userInfo")
       f(userInfo)
     }
     case None => Promise[T]().failure(new RuntimeException("UserNotFound")).future

@@ -6,6 +6,11 @@ angular.module('patUI')
   var dataRoot = patConfig.dataRoot;
   var commandSideServiceUrl = patConfig.commandSideServiceUrl;
 	return $resource(dataRoot + '/groups/:groupId/group.json', {}, {
+	  allGroups: {
+	    url: '/groups.json',
+	    method: 'GET',
+	    isArray: true
+	  },
 	  newGroup: {
 	    url: commandSideServiceUrl + '/groups',
 	    method: 'POST'

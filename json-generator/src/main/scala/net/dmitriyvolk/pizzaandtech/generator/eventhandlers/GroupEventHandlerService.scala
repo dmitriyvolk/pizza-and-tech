@@ -31,8 +31,7 @@ class GroupEventHandlerService @Autowired() (stateUpdater: StateUpdater) extends
 
   @EventHandlerMethod
   def meetingListUpdated(de: DispatchedEvent[MeetingListUpdatedEvent]) = Future {
-    val groupId: GroupId = GroupId(de.entityId)
-    stateUpdater.updateMeetingListForGroup(groupId, de.event.meetingList)
+    stateUpdater.updateMeetingListForGroup(GroupId(de.entityId), de.event.meetingList)
   }
 
   @EventHandlerMethod

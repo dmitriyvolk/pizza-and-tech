@@ -22,5 +22,5 @@ class MeetingService()(implicit eventStore: EventStore) {
     existingEntity[Meeting](meetingId) <== CommentOnMeetingCommand(CommentDetails(commenter.userId, commenter.briefInfo.fullName, commentText, new DateTime()))
 
   def rsvpToMeeting(meetingId: MeetingId, respondent: UserIdAndBriefInfo, rsvpDetails: RsvpDetails) =
-    existingEntity(meetingId) <== RsvpToMeetingCommand(respondent, rsvpDetails)
+    existingEntity[Meeting](meetingId) <== RsvpToMeetingCommand(respondent, rsvpDetails)
 }

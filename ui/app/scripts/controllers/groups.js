@@ -11,6 +11,9 @@
   angular.module('patUI')
   .controller('GroupsCtrl', ['$scope', '$rootScope', '$location', 'Group', function ($scope, $rootScope, $location, Group) {
     $rootScope.activeTab = 'groups';
+
+    $scope.groups = Group.allGroups();
+
     $scope.newGroup = {
       submitNewGroupForm: function() {
         Group.newGroup({name: $scope.newGroup.name, description: $scope.newGroup.description})

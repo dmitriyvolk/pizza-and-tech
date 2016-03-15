@@ -1,6 +1,6 @@
 package net.dmitriyvolk.pizzaandtech.generator.eventhandlers
 
-import net.chrisrichardson.eventstore.subscriptions.{DispatchedEvent, EventHandlerMethod, EventSubscriber}
+import net.chrisrichardson.eventstore.subscriptions.{CompoundEventHandler, DispatchedEvent, EventHandlerMethod, EventSubscriber}
 import net.dmitriyvolk.pizzaandtech.domain.user.UserId
 import net.dmitriyvolk.pizzaandtech.domain.user.events.{NewUserRegisteredEvent, GroupListOfUserUpdatedEvent}
 import net.dmitriyvolk.pizzaandtech.generator.StateUpdater
@@ -12,7 +12,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 @Component
 @EventSubscriber(id = "userJsonGeneratorHandlers")
-class UserEventHandlerService @Autowired() (stateUpdater: StateUpdater) {
+class UserEventHandlerService @Autowired() (stateUpdater: StateUpdater) extends CompoundEventHandler {
 
   @EventHandlerMethod
   def userCreated(de: DispatchedEvent[NewUserRegisteredEvent]) = Future {

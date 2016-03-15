@@ -1,6 +1,6 @@
 package net.dmitriyvolk.pizzaandtech.test.commandside
 
-import net.dmitriyvolk.pizzaandtech.commandside.web.{CreateGroupRequest, CreateGroupResponse, ScheduleMeetingRequest, ScheduleMeetingResponse}
+import net.dmitriyvolk.pizzaandtech.commandside.web.{CreateOrUpdateGroupRequest, CreateGroupResponse, ScheduleMeetingRequest, ScheduleMeetingResponse}
 import net.dmitriyvolk.pizzaandtech.domain.meeting.MeetingDetails
 import org.joda.time.DateTime
 import org.scalatest.{FeatureSpec, GivenWhenThen, Matchers}
@@ -13,7 +13,7 @@ class MeetingCommandSideServiceSpec extends FeatureSpec with GivenWhenThen with 
   feature("Meetings can be scheduled and updated") {
     scenario("User schedules a new meeting") {
       Given("an existing group")
-      val groupId = restTemplate.postForEntity(groupsUrl, CreateGroupRequest(name = "groupname", description = "group description"), classOf[CreateGroupResponse]).getBody.groupId
+      val groupId = restTemplate.postForEntity(groupsUrl, CreateOrUpdateGroupRequest(name = "groupname", description = "group description"), classOf[CreateGroupResponse]).getBody.groupId
 
       When("calling scheduleMeetingAPI with complete details")
       val meetingDetails = MeetingDetails("myfirstmeeting", "My First Meeting", DateTime.now())

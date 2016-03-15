@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.{RequestMethod, RequestMapping, R
 class UsersController @Autowired() (userDetailsService: InMemoryUserMap) {
 
   @RequestMapping(method = Array(RequestMethod.GET))
-  def allUsers(): Seq[UserIdAndBriefInfo] = {
-    userDetailsService.getAllUsers
+  def allUsers(): Seq[Map[String, String]] = {
+    userDetailsService.getAllUsers.map { u =>
+      Map(("id", u.userId.entityId.id), ("name", u.briefInfo.fullName))
+    }
   }
 
 }

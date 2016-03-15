@@ -53,15 +53,16 @@
 	    restrict: 'E',
 	    scope: {},
 	    template: [
-	      '<select ng-model="currentUser.id">',
+	      '<select ng-model="currentUserId">',
 	      '  <option ng-repeat="user in users" value="{{user.id}}">{{user.name}}</option>',
 	      '</select>'
       ].join(''),
 	    controller: function($scope, $rootScope, User) {
+	      $rootScope.currentUser = {};
 	      $scope.users = User.list();
-	      $scope.selectUser = function(user) {
-	        $rootScope.currentUser = user;
-	      };
+	      $scope.$watch('currentUserId', function(newValue) {
+	        $rootScope.currentUser.id = newValue;
+	      });
 	    }
 	  };
 	});

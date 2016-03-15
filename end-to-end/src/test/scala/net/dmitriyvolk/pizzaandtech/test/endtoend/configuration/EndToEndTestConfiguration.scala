@@ -33,12 +33,14 @@ class EndToEndTestConfiguration {
   }
 
   @Bean
-  def fakeDataWriter = new DataWriter {
-    val data = scala.collection.mutable.Map[String, String]()
-    override def writeJsonData(folder: DataPath, filename: String, json: String): Unit = {
-      val pathString = s"${folder.path}/$filename"
-      data.put(pathString, json)
-    }
+  def fakeDataWriter = new InMemoryDataHolder
+}
+
+class InMemoryDataHolder extends DataWriter {
+  val data = scala.collection.mutable.Map[String, String]()
+  override def writeJsonData(folder: DataPath, filename: String, json: String): Unit = {
+    val pathString = s"${folder.path}/$filename"
+    data.put(pathString, json)
   }
 
 }

@@ -1,6 +1,6 @@
 package net.dmitriyvolk.pizzaandtech.commandside.web
 
-import java.security.Principal
+import net.dmitriyvolk.pizzaandtech.domain.Implicits._
 import net.dmitriyvolk.pizzaandtech.domain.common.{UserIdHolder, UserInfoResolver}
 import net.dmitriyvolk.pizzaandtech.domain.group.GroupId
 import net.dmitriyvolk.pizzaandtech.domain.meeting.events.RsvpDetails
@@ -8,7 +8,7 @@ import net.dmitriyvolk.pizzaandtech.domain.meeting.{MeetingDetails, MeetingId, M
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.RequestMethod._
 import org.springframework.web.bind.annotation._
-import net.dmitriyvolk.pizzaandtech.domain.Implicits._
+
 import scala.concurrent.ExecutionContext.Implicits.global
 
 @RestController
@@ -51,7 +51,7 @@ class MeetingRsvpController @Autowired() (private val meetingService: MeetingSer
 
   @RequestMapping(method=Array(POST))
   def rsvpToMeeting(@PathVariable("meetingId") meetingId: String,
-                    @RequestBody rsvpDetails: RsvpDetails, principal: Principal) = {
+                    @RequestBody rsvpDetails: RsvpDetails) = {
     WebUtil.toDeferredResult {
       withCurrentUser {
         meetingService.rsvpToMeeting(MeetingId(meetingId), _, rsvpDetails)

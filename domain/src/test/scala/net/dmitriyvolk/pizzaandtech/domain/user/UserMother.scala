@@ -12,4 +12,6 @@ object UserMother {
   def apply(userId: String, firstName: String, lastName: String) = UserIdAndBriefInfo(UserId(EntityId(userId)), UserBriefInfo(s"$firstName.$lastName", s"$firstName $lastName"))
 
   val scottTiger = UserMother("1", "Scott", "Tiger")
+
+  def userInfo(seed: String) = UserBriefInfo(s"user-$seed", s"User $seed")
 }

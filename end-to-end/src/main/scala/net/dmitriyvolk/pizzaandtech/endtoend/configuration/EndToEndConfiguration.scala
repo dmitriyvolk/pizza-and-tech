@@ -34,6 +34,7 @@ class EndToEndConfiguration {
   def runOnStartup(userService: UserService) = new ApplicationListener[ContextRefreshedEvent] {
     override def onApplicationEvent(event: ContextRefreshedEvent): Unit = {
       userService.registerUser(UserBriefInfo("scott", "Scott Tiger"))
+      userService.registerUser(UserBriefInfo("jpublic", "John Q. Public"))
     }
   }
 

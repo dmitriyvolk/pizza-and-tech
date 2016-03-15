@@ -20,8 +20,11 @@ case class Group(groupDetails: GroupDetails, comments: Seq[CommentDetails], meet
   def addComment(commentDetails: CommentDetails) = comments :+ commentDetails
 
   override def processCommand: PartialFunction[GroupCommand, Seq[Event]] = {
-    case RegisterNewGroupCommand(UserIdAndBriefInfo(userId, userInfo), groupDetails) =>
-      Seq(GroupCreatedEvent(groupDetails), UserAcceptedIntoGroupEvent(userId, groupDetails), UserListForGroupUpdatedEvent(userJoins(userId, userInfo)))
+    case RegisterNewGroupCommand(UserIdAndBriefInfo(userId, userInfo), newGroupDetails) => {
+      val events = Seq(GroupCreatedEvent(newGroupDetails), UserAcceptedIntoGroupEvent(userId, newGroupDetails), UserListForGroupUpdatedEvent(userJoins(userId, userInfo)))
+      println(events.mkString("----Emitting: [\n", ",\n", "]"))
+      events
+    }
     case UpdateGroupDetailsCommand(groupDetails) =>
       Seq(GroupDetailsUpdatedEvent(groupDetails))
     case CommentOnGroupCommand(commentDetails) =>
@@ -41,6 +44,7 @@ case class Group(groupDetails: GroupDetails, comments: Seq[CommentDetails], meet
     case GroupDetailsUpdatedEvent(updatedGroupDetails) => copy(groupDetails = updatedGroupDetails)
     case CommentListForGroupUpdatedEvent(updatedCommentList) => copy(comments = updatedCommentList)
     case MeetingListUpdatedEvent(updatedMeetingList) => copy(meetings = updatedMeetingList)
+    case UserListForGroupUpdatedEvent(updatedUsersList) => copy(users = updatedUsersList)
     case _ => this
   }
 }

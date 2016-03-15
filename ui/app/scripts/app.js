@@ -49,9 +49,6 @@
         templateUrl: 'views/meeting.html',
         controller: 'MeetingCtrl'
       })
-      .when('/users', {
-        templateUrl: 'views/users.html'
-      })
       .when('/users/:id', {
         templateUrl: 'views/user.html',
         controller: 'UserCtrl'
@@ -70,10 +67,10 @@
       });
   })
   .config(function($httpProvider) {
-    $httpProvider.interceptors.push(function($q, $rootScope) {
+    $httpProvider.interceptors.push(function($rootScope) {
       return {
-        'request': function(config) {
-          config.headers['X-PIZZAANDTECH-USERID'] = $rootScope.userId;
+        request: function(config) {
+          config.headers['X-PIZZAANDTECH-USERID'] = $rootScope.currentUser.id;
           return config;
         }
       };

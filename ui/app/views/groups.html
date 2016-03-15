@@ -3,6 +3,9 @@
 	<div class="panel panel-default">
 		<div class="panel-body">
 			<p>We have groups for everybody, just search for whatever interests you</p>
+      <ul class="list-group">
+        <li ng-repeat="group in groups"><a href="#/group/{{group.id}}">{{group.name}}</a></li>
+      </ul>
 		</div>
 	</div>
   <div class="alert alert-danger alert-dismissible" role="alert" ng-show="newGroup.error">

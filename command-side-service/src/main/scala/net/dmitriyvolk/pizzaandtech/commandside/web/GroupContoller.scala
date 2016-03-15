@@ -14,18 +14,18 @@ import scala.concurrent.ExecutionContext.Implicits.global
 class GroupContoller @Autowired() (val groupService: GroupService, val userIdHolder: UserIdHolder, val userInfoResolver: UserInfoResolver) extends ResolvingCurrentUser {
 
   @RequestMapping(method=Array(POST))
-  def createGroup(@RequestBody createGroupRequest: CreateGroupRequest) = {
+  def createGroup(@RequestBody createGroupRequest: CreateOrUpdateGroupRequest) = {
 
     WebUtil.toDeferredResult {
-      withCurrentUser {
-        groupService.createGroup(createGroupRequest.makeGroupDetails, _) map (createdGroup => CreateGroupResponse(createdGroup.entityId.id))
+      withCurrentUser { userIdAndBriefInfo =>
+        groupService.createGroup(createGroupRequest.makeGroupDetails, userIdAndBriefInfo) map (createdGroup => CreateGroupResponse(createdGroup.entityId.id))
       }
     }
   }
 
   @RequestMapping(value=Array("/{groupId}"), method = Array(PUT))
-  def updateGroupDetails(@PathVariable groupId:String, @RequestBody groupDetails:GroupDetails) = {
-    val future = groupService.updateGroupInfo(GroupId(groupId), groupDetails)
+  def updateGroupDetails(@PathVariable groupId:String, @RequestBody createOrUpdateGroupRequest: CreateOrUpdateGroupRequest) = {
+    val future = groupService.updateGroupInfo(GroupId(groupId), createOrUpdateGroupRequest.makeGroupDetails)
     WebUtil.toDeferredResult(future map (updatedGroup => UpdateGroupResponse(updatedGroup.entityId.id)))
   }
 
@@ -63,7 +63,7 @@ class GroupMembershipController @Autowired() (private val userService: UserServi
 
 }
 
-case class CreateGroupRequest(name: String, description: String) {
+case class CreateOrUpdateGroupRequest(name: String, description: String) {
   def makeGroupDetails = GroupDetails(name, description)
 }
 case class CreateGroupResponse(groupId: String)

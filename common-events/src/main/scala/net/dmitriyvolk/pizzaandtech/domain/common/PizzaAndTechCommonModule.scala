@@ -7,6 +7,7 @@ import net.chrisrichardson.eventstore.EntityId
 import net.dmitriyvolk.pizzaandtech.domain.EntityIdWrapper
 import net.dmitriyvolk.pizzaandtech.domain.comment.CommentDetails
 import net.dmitriyvolk.pizzaandtech.domain.group.{GroupId, GroupIdAndDetails}
+import net.dmitriyvolk.pizzaandtech.domain.meeting.events.{Yes, YesNoMaybe}
 import net.dmitriyvolk.pizzaandtech.domain.meeting.{MeetingId, MeetingIdAndDetails}
 import net.dmitriyvolk.pizzaandtech.domain.user.{UserId, UserIdAndBriefInfo}
 
@@ -29,12 +30,13 @@ object PizzaAndTechCommonModule extends SimpleModule {
   })
 
   addSerializer(new JsonSerializer[GroupIdAndDetails] {
-    override def serialize(value: GroupIdAndDetails, gen: JsonGenerator, serializers: SerializerProvider): Unit =
+    override def serialize(value: GroupIdAndDetails, gen: JsonGenerator, serializers: SerializerProvider): Unit = {
+      println(s"Serializing: $value")
       gen.writeObject(Map(
         ("id", value.groupId),
         ("name", value.groupDetails.name)
       ))
-
+    }
     override def handledType(): Class[GroupIdAndDetails] = classOf[GroupIdAndDetails]
   })
 
@@ -76,6 +78,12 @@ object PizzaAndTechCommonModule extends SimpleModule {
     override def handledType(): Class[UserIdAndBriefInfo] = classOf[UserIdAndBriefInfo]
   })
 
+  addDeserializer(classOf[YesNoMaybe], new JsonDeserializer[YesNoMaybe] {
+    override def deserialize(jp: JsonParser, ctxt: DeserializationContext): YesNoMaybe = {
+      println(s"GOT >>>${jp.getText}<<<")
+      Yes
+    }
+  })
 
 }
 class EntityIdWrapperSerializer[T <: EntityIdWrapper] extends JsonSerializer[T] {
